@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="Aspire.AppHost/Aspire.AppHost.csproj" Id="291d3165-a6d4-436d-b74f-8ab1ad656e50" />
+  <Project Path="Aspire.ServiceDefaults/Aspire.ServiceDefaults.csproj" />
   <Project Path="PureGym.Application/PureGym.Application.csproj" />
   <Project Path="PureGym.Domain/PureGym.Domain.csproj" />
   <Project Path="PureGym.Infrastructure/PureGym.Infrastructure.csproj" />

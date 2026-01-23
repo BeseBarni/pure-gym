@@ -1,4 +1,3 @@
-using PureGym.Domain.Enums;
 using PureGym.Domain.Exceptions;
 
 namespace PureGym.Domain.Entities;
