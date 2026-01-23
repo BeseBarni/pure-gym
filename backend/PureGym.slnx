@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="PureGym.Application/PureGym.Application.csproj" />
+  <Project Path="PureGym.Domain/PureGym.Domain.csproj" />
+  <Project Path="PureGym.Infrastructure/PureGym.Infrastructure.csproj" />
+  <Project Path="PureGym.WebAPI/PureGym.WebAPI.csproj" />
+</Solution>
