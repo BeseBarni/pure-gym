@@ -1,19 +1,17 @@
 using PureGym.Domain.Exceptions;
-using PureGym.Domain.Interfaces;
 
 namespace PureGym.Domain.Entities;
 
-public class MembershipType : ISoftDeletable
+public class MembershipType : BaseSoftDeletableEntity
 {
-    public Guid Id { get; private set; }
+    public override Guid Id { get; } = Guid.NewGuid();
     public string Name { get; private set; } = null!;
     public string? Description { get; private set; }
     public decimal PricePerMonth { get; private set; }
     public int DurationInDays { get; private set; }
     public bool IsActive { get; private set; }
 
-    public bool IsDeleted { get; private set; }
-    public DateTime? DeletedAtUtc { get; private set; }
+    protected override string EntityName => nameof(MembershipType);
 
     public ICollection<Membership> Memberships { get; private set; } = [];
 
@@ -32,7 +30,6 @@ public class MembershipType : ISoftDeletable
 
         return new MembershipType
         {
-            Id = Guid.NewGuid(),
             Name = name.Trim(),
             Description = description?.Trim(),
             PricePerMonth = pricePerMonth,
@@ -74,28 +71,8 @@ public class MembershipType : ISoftDeletable
         IsActive = true;
     }
 
-    public void SoftDelete()
+    protected override void OnBeforeSoftDelete()
     {
-        if (IsDeleted)
-            throw DomainException.AlreadyDeleted(nameof(MembershipType), Id);
-
         IsActive = false;
-        IsDeleted = true;
-        DeletedAtUtc = DateTime.UtcNow;
-    }
-
-    public void Restore()
-    {
-        if (!IsDeleted)
-            throw DomainException.NotDeleted(nameof(MembershipType), Id);
-
-        IsDeleted = false;
-        DeletedAtUtc = null;
-    }
-
-    private void ThrowIfDeleted()
-    {
-        if (IsDeleted)
-            throw DomainException.EntityDeleted(nameof(MembershipType), Id);
     }
 }

@@ -1,12 +1,11 @@
 using PureGym.Domain.Enums;
 using PureGym.Domain.Exceptions;
-using PureGym.Domain.Interfaces;
 
 namespace PureGym.Domain.Entities;
 
-public class Member : ISoftDeletable
+public class Member : BaseSoftDeletableEntity
 {
-    public Guid Id { get; private set; }
+    public override Guid Id { get; } = Guid.NewGuid();
     public string FirstName { get; private set; } = null!;
     public string LastName { get; private set; } = null!;
     public string Email { get; private set; } = null!;
@@ -15,8 +14,7 @@ public class Member : ISoftDeletable
     public DateTime CreatedAtUtc { get; private set; }
     public Guid? UserId { get; private set; }
 
-    public bool IsDeleted { get; private set; }
-    public DateTime? DeletedAtUtc { get; private set; }
+    protected override string EntityName => nameof(Member);
 
     public ICollection<Membership> Memberships { get; private set; } = [];
     public ICollection<GymAccessLog> AccessLogs { get; private set; } = [];
@@ -38,7 +36,6 @@ public class Member : ISoftDeletable
 
         return new Member
         {
-            Id = Guid.NewGuid(),
             FirstName = firstName.Trim(),
             LastName = lastName.Trim(),
             Email = email.ToLowerInvariant().Trim(),
@@ -99,32 +96,11 @@ public class Member : ISoftDeletable
         LastName = lastName.Trim();
     }
 
-    public void SoftDelete()
+    protected override void OnBeforeSoftDelete()
     {
-        if (IsDeleted)
-            throw DomainException.AlreadyDeleted(nameof(Member), Id);
-
         foreach (var membership in Memberships.Where(m => m.IsValid()))
         {
             membership.Cancel();
         }
-
-        IsDeleted = true;
-        DeletedAtUtc = DateTime.UtcNow;
-    }
-
-    public void Restore()
-    {
-        if (!IsDeleted)
-            throw DomainException.NotDeleted(nameof(Member), Id);
-
-        IsDeleted = false;
-        DeletedAtUtc = null;
-    }
-
-    private void ThrowIfDeleted()
-    {
-        if (IsDeleted)
-            throw DomainException.EntityDeleted(nameof(Member), Id);
     }
 }
