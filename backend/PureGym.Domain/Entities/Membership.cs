@@ -1,0 +1,129 @@
+using PureGym.Domain.Enums;
+using PureGym.Domain.Exceptions;
+using PureGym.Domain.Interfaces;
+
+namespace PureGym.Domain.Entities;
+
+public class Membership : ISoftDeletable
+{
+    public Guid Id { get; private set; }
+    public Guid MemberId { get; private set; }
+    public Guid MembershipTypeId { get; private set; }
+    public DateTime StartDateUtc { get; private set; }
+    public DateTime EndDateUtc { get; private set; }
+    public MembershipStatus Status { get; private set; }
+    public DateTime CreatedAtUtc { get; private set; }
+
+    public bool IsDeleted { get; private set; }
+    public DateTime? DeletedAtUtc { get; private set; }
+
+    public Member Member { get; private set; } = null!;
+    public MembershipType MembershipType { get; private set; } = null!;
+    public ICollection<GymAccessLog> AccessLogs { get; private set; } = [];
+
+    public int DaysRemaining => IsValid() ? (EndDateUtc - DateTime.UtcNow).Days : 0;
+
+    private Membership() { }
+
+    public static Membership Create(Member member, MembershipType type)
+    {
+        if (member.IsDeleted)
+            throw DomainException.EntityDeleted(nameof(Member), member.Id);
+
+        if (type.IsDeleted)
+            throw DomainException.EntityDeleted(nameof(MembershipType), type.Id);
+
+        if (!type.IsActive)
+            throw DomainException.MembershipTypeInactive(type.Id);
+
+        var now = DateTime.UtcNow;
+        var membership = new Membership
+        {
+            Id = Guid.NewGuid(),
+            MemberId = member.Id,
+            MembershipTypeId = type.Id,
+            StartDateUtc = now,
+            EndDateUtc = now.AddDays(type.DurationInDays),
+            Status = MembershipStatus.Active,
+            CreatedAtUtc = now
+        };
+
+        member.AddMembership(membership);
+        return membership;
+    }
+
+    public bool IsValid() =>
+        !IsDeleted &&
+        Status == MembershipStatus.Active &&
+        DateTime.UtcNow >= StartDateUtc &&
+        DateTime.UtcNow <= EndDateUtc;
+
+    public bool IsExpired() => DateTime.UtcNow > EndDateUtc;
+
+    public void Cancel()
+    {
+        ThrowIfDeleted();
+
+        if (Status == MembershipStatus.Cancelled)
+            throw DomainException.MembershipAlreadyCancelled(Id);
+
+        Status = MembershipStatus.Cancelled;
+    }
+
+    public void Suspend()
+    {
+        ThrowIfDeleted();
+
+        if (Status != MembershipStatus.Active)
+            throw DomainException.InvalidState(nameof(Membership), Status.ToString(), "suspend");
+
+        Status = MembershipStatus.Suspended;
+    }
+
+    public void Reactivate()
+    {
+        ThrowIfDeleted();
+
+        if (IsExpired())
+            throw DomainException.MembershipExpired(Id);
+
+        if (Status == MembershipStatus.Active)
+            throw DomainException.InvalidState(nameof(Membership), nameof(MembershipStatus.Active), "reactivate");
+
+        Status = MembershipStatus.Active;
+    }
+
+    public void Extend(int additionalDays)
+    {
+        ThrowIfDeleted();
+
+        if (additionalDays <= 0)
+            throw DomainException.InvalidDuration(additionalDays);
+
+        EndDateUtc = EndDateUtc.AddDays(additionalDays);
+    }
+
+    public void SoftDelete()
+    {
+        if (IsDeleted)
+            throw DomainException.AlreadyDeleted(nameof(Membership), Id);
+
+        IsDeleted = true;
+        DeletedAtUtc = DateTime.UtcNow;
+    }
+
+    public void Restore()
+    {
+        if (!IsDeleted)
+            throw DomainException.NotDeleted(nameof(Membership), Id);
+
+        IsDeleted = false;
+        DeletedAtUtc = null;
+    }
+
+    private void ThrowIfDeleted()
+    {
+        if (IsDeleted)
+            throw DomainException.EntityDeleted(nameof(Membership), Id);
+    }
+}
