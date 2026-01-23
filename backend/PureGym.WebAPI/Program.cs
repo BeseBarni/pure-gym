@@ -1,5 +1,7 @@
+using FastEndpoints;
 using FitNetClean.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using PureGym.Application;
 using PureGym.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,8 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 // Add services to the container.
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddGeneratedSettings(builder.Configuration);
+builder.Services.AddFastEndpoints();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -31,6 +35,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseFastEndpoints();
 
 var summaries = new[]
 {
