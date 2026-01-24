@@ -85,6 +85,7 @@ public static class DependencyInjection
         services.AddAuthorization();
 
         services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<ICacheService, InMemoryCacheService>();
 
         services.AddHostedService<DatabaseSeeder>();
 
