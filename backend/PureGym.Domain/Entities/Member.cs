@@ -12,6 +12,7 @@ public class Member : BaseSoftDeletableEntity
     public DateTime DateOfBirth { get; private set; }
     public DateTime CreatedAtUtc { get; private set; }
     public Guid? UserId { get; private set; }
+    public ApplicationUser? User { get; private set; }
 
     protected override string EntityName => nameof(Member);
 

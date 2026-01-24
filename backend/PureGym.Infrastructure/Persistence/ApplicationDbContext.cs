@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PureGym.Application.Interfaces;
 using PureGym.Domain.Entities;
@@ -5,7 +7,7 @@ using PureGym.Infrastructure.Persistence.Extensions;
 
 namespace PureGym.Infrastructure.Persistence;
 
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>, IApplicationDbContext
 {
     public DbSet<Member> Members => Set<Member>();
     public DbSet<Membership> Memberships => Set<Membership>();
