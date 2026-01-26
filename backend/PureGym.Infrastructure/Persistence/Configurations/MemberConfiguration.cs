@@ -36,6 +36,7 @@ public class MemberConfiguration : IEntityTypeConfiguration<Member>
 
         builder.Property(m => m.DateOfBirth)
             .HasColumnName("date_of_birth")
+            .HasColumnType("date")
             .IsRequired();
 
         builder.Property(m => m.CreatedAtUtc)

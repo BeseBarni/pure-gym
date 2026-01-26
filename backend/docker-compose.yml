@@ -1,0 +1,56 @@
+networks:
+  dev:
+    driver: bridge
+
+services:
+  puregym-db:
+    image: postgres:16-alpine
+    container_name: puregym-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password123!
+      POSTGRES_DB: puregym
+    ports:
+    - "5432:5432"
+    restart: unless-stopped
+    volumes:
+    - puregym_data:/var/lib/postgresql/data
+    networks:
+    - dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d puregym"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  
+  puregym.webapi:
+    image: ${DOCKER_REGISTRY-}puregymwebapi
+    build:
+      context: .
+      dockerfile: PureGym.WebAPI/Dockerfile
+    depends_on:
+      puregym-db:
+        condition: service_healthy
+    container_name: puregym-api
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - Database__ConnectionString=Host=puregym-db;Port=5432;Database=puregym;Username=postgres;Password=Password123!;Include Error Detail=true
+      - APPLY_MIGRATIONS=true
+    networks:
+      - dev
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
+  
+volumes:
+  puregym_data:
+    driver: local

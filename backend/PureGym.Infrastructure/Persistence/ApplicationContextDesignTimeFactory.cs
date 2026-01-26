@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using PureGym.Infrastructure.Persistence;
+using PureGym.Infrastructure.Settings;
 
-namespace PureGym.Infrastructure.Persistence;
+namespace FitNetClean.Infrastructure.Persistence;
 
 public class ApplicationContextDesignTimeFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 {
@@ -27,24 +29,21 @@ public class ApplicationContextDesignTimeFactory : IDesignTimeDbContextFactory<A
             .AddJsonFile("appsettings.Development.json", optional: true)
             .Build();
 
-        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+        var databaseSettings = new DatabaseSettings();
+        configuration.GetSection(DatabaseSettings.SectionName).Bind(databaseSettings);
 
-        // Use the same connection string name as configured in Aspire
-        var connectionString = configuration.GetConnectionString("puregymdb");
+        DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder = new();
+
+        string? connectionString = databaseSettings.ConnectionString;
 
         if (string.IsNullOrEmpty(connectionString))
         {
-            // Fallback for design-time when Aspire connection string is not available
-            // This uses a local PostgreSQL instance with a design-time specific database name
-            connectionString = "Host=localhost;Database=puregymdb_design;Username=postgres;Password=postgres";
-            Console.WriteLine($"Warning: Using fallback connection string for design-time. " +
-                            $"Current directory: {currentDir}, Config base path: {basePath}");
+            throw new InvalidOperationException(
+                $"Could not find connection string in Database:ConnectionString. " +
+                $"Current directory: {currentDir}, Config base path: {basePath}");
         }
 
-        optionsBuilder.UseNpgsql(connectionString, npgsqlOptions =>
-        {
-            npgsqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-        });
+        optionsBuilder.UseNpgsql(connectionString);
 
         return new ApplicationDbContext(optionsBuilder.Options);
     }

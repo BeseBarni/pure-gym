@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PureGym.Application.Interfaces;
 using PureGym.Domain.Entities;
-using PureGym.Infrastructure.Persistence.Extensions;
+using PureGym.Infrastructure.Extensions;
 
 namespace PureGym.Infrastructure.Persistence;
 

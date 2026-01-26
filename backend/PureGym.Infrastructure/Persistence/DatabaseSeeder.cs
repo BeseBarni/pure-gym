@@ -1,34 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using PureGym.Domain.Entities;
 using PureGym.Domain.Enums;
 
 namespace PureGym.Infrastructure.Persistence;
 
-public class DatabaseSeeder : IHostedService
+public static class DatabaseSeeder
 {
-    private readonly IServiceProvider _serviceProvider;
 
-    public DatabaseSeeder(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
-    {
-        using var scope = _serviceProvider.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-        if (await context.Members.AnyAsync(cancellationToken))
-            return;
-
-        await SeedTestDataAsync(context, cancellationToken);
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
-
-    private static async Task SeedTestDataAsync(ApplicationDbContext context, CancellationToken cancellationToken)
+    public static async Task SeedTestDataAsync(ApplicationDbContext context, CancellationToken cancellationToken)
     {
         // Create a membership type
         var monthlyMembership = MembershipType.Create(

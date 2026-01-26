@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PureGym.Domain.Interfaces;
 
-namespace PureGym.Infrastructure.Persistence.Extensions;
+namespace PureGym.Infrastructure.Extensions;
 
 public static class ModelBuilderExtensions
 {

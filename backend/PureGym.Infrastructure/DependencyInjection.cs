@@ -18,8 +18,10 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        var dbConnection = configuration.GetSection(DatabaseSettings.SectionName)?.Get<DatabaseSettings>()?.ConnectionString ?? throw new InvalidOperationException($"{DatabaseSettings.SectionName} configuration value cannot be null");
+
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("puregymdb")));
+            options.UseNpgsql(dbConnection));
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
@@ -86,8 +88,6 @@ public static class DependencyInjection
 
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<ICacheService, InMemoryCacheService>();
-
-        services.AddHostedService<DatabaseSeeder>();
 
         return services;
     }
