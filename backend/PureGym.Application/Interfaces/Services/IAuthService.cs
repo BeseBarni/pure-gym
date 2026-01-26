@@ -1,6 +1,6 @@
 ﻿using PureGym.SharedKernel.Results;
 
-namespace PureGym.Application.Interfaces;
+namespace PureGym.Application.Interfaces.Services;
 
 public interface IAuthService
 {

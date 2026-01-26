@@ -1,0 +1,12 @@
+@DoorMock_HostAddress = http://localhost:5102
+
+### Simulate a successful QR Code Scan
+# This calls your Door Mock, which then calls the Brain
+POST {{DoorMock_HostAddress}}/scan?qrCode=VALID_MEMBER_123
+Accept: application/json
+
+###
+
+### Simulate an invalid QR Code Scan
+POST {{DoorMock_HostAddress}}/scan?qrCode=EXPIRED_OR_FAKE_CODE
+Accept: application/json

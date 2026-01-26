@@ -1,5 +1,5 @@
+using PureGym.SharedKernel.Interfaces;
 using System.ComponentModel.DataAnnotations;
-using PureGym.Domain.Interfaces;
 
 namespace PureGym.Infrastructure.Settings;
 

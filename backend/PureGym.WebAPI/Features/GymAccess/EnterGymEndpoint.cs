@@ -8,7 +8,7 @@ public sealed class EnterGymEndpoint : Endpoint<EnterGym.Request, EnterGym.Respo
 {
     public override void Configure()
     {
-        Post("/api/gym/enter");
+        Post("/gym/enter");
         AllowAnonymous();
         Summary(s =>
         {

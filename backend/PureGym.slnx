@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/MockClients/">
+    <Project Path="PureGym.Mock.RevolvingDoor/PureGym.Mock.RevolvingDoor.csproj" Id="43c1b937-e2ad-477f-ad94-6b8fcd3bc431" />
+  </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>

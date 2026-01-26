@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
-using PureGym.Application.Interfaces;
+using PureGym.Application.Interfaces.Services;
 
 namespace PureGym.Application.Features.Authentication;
 

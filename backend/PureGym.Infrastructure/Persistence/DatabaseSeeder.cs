@@ -10,6 +10,13 @@ public static class DatabaseSeeder
 
     public static async Task SeedTestDataAsync(ApplicationDbContext context, CancellationToken cancellationToken)
     {
+        // Check if test data already exists
+        var hasMembers = await context.Members.AnyAsync(cancellationToken);
+        if (hasMembers)
+        {
+            return;
+        }
+
         // Create a membership type
         var monthlyMembership = MembershipType.Create(
             name: "Monthly Premium",

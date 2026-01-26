@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using PureGym.Application.Interfaces;
+using PureGym.Application.Interfaces.Services;
 using PureGym.Infrastructure.Persistence;
 using PureGym.SharedKernel.Results;
 using System.Security.Claims;

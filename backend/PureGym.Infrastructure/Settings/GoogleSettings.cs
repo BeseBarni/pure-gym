@@ -1,4 +1,4 @@
-﻿using PureGym.Domain.Interfaces;
+﻿using PureGym.SharedKernel.Interfaces;
 
 namespace PureGym.Infrastructure.Settings;
 

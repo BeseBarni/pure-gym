@@ -1,4 +1,4 @@
-﻿using PureGym.Application.Interfaces;
+﻿using PureGym.Application.Interfaces.Services;
 using System.Collections.Concurrent;
 
 namespace PureGym.Infrastructure.Services;

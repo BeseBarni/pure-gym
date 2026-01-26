@@ -5,7 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PureGym.Application.Interfaces;
-using PureGym.Domain.Entities;
+using PureGym.Application.Interfaces.Services;
+using PureGym.Infrastructure;
 using PureGym.Infrastructure.Persistence;
 using PureGym.Infrastructure.Services;
 using PureGym.Infrastructure.Settings;
@@ -18,6 +19,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddGeneratedSettings(configuration);
+
         var dbConnection = configuration.GetSection(DatabaseSettings.SectionName)?.Get<DatabaseSettings>()?.ConnectionString ?? throw new InvalidOperationException($"{DatabaseSettings.SectionName} configuration value cannot be null");
 
         services.AddDbContext<ApplicationDbContext>(options =>
@@ -86,8 +89,9 @@ public static class DependencyInjection
 
         services.AddAuthorization();
 
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
-        services.AddScoped<ICacheService, InMemoryCacheService>();
+        services.AddSingleton<ICacheService, InMemoryCacheService>();
 
         return services;
     }
