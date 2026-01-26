@@ -15,6 +15,7 @@ WORKDIR /src
 COPY ["PureGym.WebAPI/PureGym.WebAPI.csproj", "PureGym.WebAPI/"]
 COPY ["PureGym.Application/PureGym.Application.csproj", "PureGym.Application/"]
 COPY ["PureGym.Domain/PureGym.Domain.csproj", "PureGym.Domain/"]
+COPY ["PureGym.SharedKernel/PureGym.SharedKernel.csproj", "PureGym.SharedKernel/"]
 COPY ["PureGym.Infrastructure/PureGym.Infrastructure.csproj", "PureGym.Infrastructure/"]
 COPY ["PureGym.SourceGenerators/PureGym.SourceGenerators.csproj", "PureGym.SourceGenerators/"]
 RUN dotnet restore "./PureGym.WebAPI/PureGym.WebAPI.csproj"

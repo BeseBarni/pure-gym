@@ -5,7 +5,7 @@ namespace PureGym.Domain.Entities;
 
 public class Membership : BaseSoftDeletableEntity
 {
-    public override Guid Id { get; } = Guid.NewGuid();
+    public override Guid Id { get; protected set; } = Guid.NewGuid();
     public Guid MemberId { get; private set; }
     public Guid MembershipTypeId { get; private set; }
     public DateTime StartDateUtc { get; private set; }

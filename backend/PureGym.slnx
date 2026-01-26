@@ -5,6 +5,7 @@
   <Project Path="PureGym.Application/PureGym.Application.csproj" />
   <Project Path="PureGym.Domain/PureGym.Domain.csproj" />
   <Project Path="PureGym.Infrastructure/PureGym.Infrastructure.csproj" />
+  <Project Path="PureGym.SharedKernel/PureGym.SharedKernel.csproj" Id="d4b4d800-514d-4de9-a436-b208b69c7f5c" />
   <Project Path="PureGym.SourceGenerators/PureGym.SourceGenerators.csproj" Id="a466d32e-63c7-408f-af3b-8dfe48f7d252" />
   <Project Path="PureGym.WebAPI/PureGym.WebAPI.csproj" />
 </Solution>

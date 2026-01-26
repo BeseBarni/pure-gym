@@ -1,6 +1,5 @@
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using PureGym.Application.Interfaces;
 using PureGym.Domain.Entities;
 
@@ -54,27 +53,24 @@ public static class Register
 
     public sealed class Handler : IRequestHandler<Command, Response>
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAuthService _authService;
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IApplicationDbContext _context;
 
-        public Handler(
-            UserManager<ApplicationUser> userManager,
-            IJwtTokenService jwtTokenService,
-            IApplicationDbContext context)
+        public Handler(IAuthService authService, IJwtTokenService jwtTokenService, IApplicationDbContext context)
         {
-            _userManager = userManager;
+            _authService = authService;
             _jwtTokenService = jwtTokenService;
             _context = context;
         }
 
         public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
         {
-            var existingUser = await _userManager.FindByEmailAsync(request.Email);
-            if (existingUser is not null)
-            {
-                throw new InvalidOperationException("User with this email already exists.");
-            }
+            if (await _authService.EmailExistsAsync(request.Email)) throw new InvalidOperationException("User with this email already exists.");
+
+            var (success, userId, errors) = await _authService.CreateUserAsync(request.Email, request.Password);
+
+            if (!success) throw new Exception(string.Join(", ", errors));
 
             var member = Member.Create(
                 request.FirstName,
@@ -82,37 +78,19 @@ public static class Register
                 request.Email,
                 request.DateOfBirth);
 
+            member.LinkToUser(userId);
             if (!string.IsNullOrWhiteSpace(request.PhoneNumber))
             {
                 member.UpdateContactInfo(request.PhoneNumber);
             }
 
-            var user = new ApplicationUser
-            {
-                UserName = request.Email,
-                Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                CreatedAtUtc = DateTime.UtcNow,
-                EmailConfirmed = false
-            };
 
-            var result = await _userManager.CreateAsync(user, request.Password);
-
-            if (!result.Succeeded)
-            {
-                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                throw new InvalidOperationException($"Failed to create user: {errors}");
-            }
-
-            member.LinkToUser(user.Id);
             _context.Members.Add(member);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var roles = await _userManager.GetRolesAsync(user);
-            var token = _jwtTokenService.GenerateToken(user.Id, user.Email!, roles);
+            var token = _jwtTokenService.GenerateToken(userId, request.Email, []);
 
-            return new Response(user.Id, user.Email!, token);
+            return new Response(userId, request.Email, token);
         }
     }
 }

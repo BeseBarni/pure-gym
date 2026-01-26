@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace PureGym.Domain.Entities;
+namespace PureGym.Infrastructure.Persistence;
 
 public class ApplicationUser : IdentityUser<Guid>
 {
@@ -8,9 +8,4 @@ public class ApplicationUser : IdentityUser<Guid>
     public string? LastName { get; set; }
     public DateTime CreatedAtUtc { get; set; }
     public DateTime? LastLoginUtc { get; set; }
-    
-    public Guid? MemberId { get; set; }
-    public Member? Member { get; set; }
-
-    public string FullName => $"{FirstName} {LastName}".Trim();
 }

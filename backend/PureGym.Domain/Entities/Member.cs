@@ -4,16 +4,13 @@ namespace PureGym.Domain.Entities;
 
 public class Member : BaseSoftDeletableEntity
 {
-    public override Guid Id { get; } = Guid.NewGuid();
+    public override Guid Id { get; protected set; } = Guid.NewGuid();
     public string FirstName { get; private set; } = null!;
     public string LastName { get; private set; } = null!;
     public string Email { get; private set; } = null!;
     public string? PhoneNumber { get; private set; }
     public DateTime DateOfBirth { get; private set; }
     public DateTime CreatedAtUtc { get; private set; }
-    public Guid? UserId { get; private set; }
-    public ApplicationUser? User { get; private set; }
-
     protected override string EntityName => nameof(Member);
 
     public ICollection<Membership> Memberships { get; private set; } = [];
@@ -44,6 +41,11 @@ public class Member : BaseSoftDeletableEntity
         };
     }
 
+    public void LinkToUser(Guid userId)
+    {
+        Id = userId;
+    }
+
     public Membership? GetActiveMembership()
     {
         ThrowIfDeleted();
@@ -60,12 +62,6 @@ public class Member : BaseSoftDeletableEntity
     {
         ThrowIfDeleted();
         Memberships.Add(membership);
-    }
-
-    public void LinkToUser(Guid userId)
-    {
-        ThrowIfDeleted();
-        UserId = userId;
     }
 
     public void UpdateContactInfo(string? phoneNumber, string? email = null)

@@ -43,9 +43,6 @@ public class MemberConfiguration : IEntityTypeConfiguration<Member>
             .HasColumnName("created_at_utc")
             .IsRequired();
 
-        builder.Property(m => m.UserId)
-            .HasColumnName("user_id");
-
         builder.Property(m => m.IsDeleted)
             .HasColumnName("is_deleted")
             .IsRequired()
@@ -58,9 +55,6 @@ public class MemberConfiguration : IEntityTypeConfiguration<Member>
         builder.HasIndex(m => m.Email)
             .IsUnique()
             .HasFilter("is_deleted = false");
-
-        builder.HasIndex(m => m.UserId)
-            .HasFilter("user_id IS NOT NULL");
 
         builder.HasIndex(m => m.IsDeleted);
 

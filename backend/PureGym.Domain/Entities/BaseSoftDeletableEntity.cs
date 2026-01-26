@@ -5,7 +5,7 @@ namespace PureGym.Domain.Entities;
 
 public abstract class BaseSoftDeletableEntity : ISoftDeletable
 {
-    public abstract Guid Id { get; }
+    public abstract Guid Id { get; protected set; }
     public bool IsDeleted { get; private set; }
     public DateTime? DeletedAtUtc { get; private set; }
 
