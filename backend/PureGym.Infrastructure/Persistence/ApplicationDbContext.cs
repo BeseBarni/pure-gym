@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -25,5 +26,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         modelBuilder.ApplySoftDeleteQueryFilters();
+
+        // Add MassTransit Outbox tables
+        modelBuilder.AddInboxStateEntity();
+        modelBuilder.AddOutboxMessageEntity();
+        modelBuilder.AddOutboxStateEntity();
     }
 }
+

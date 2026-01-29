@@ -39,6 +39,7 @@ public static class DependencyInjection
                 o.QueryDelay = TimeSpan.FromSeconds(1);
                 o.UsePostgres();
                 o.DisableInboxCleanupService();
+                o.UseBusOutbox();
             });
 
             x.UsingRabbitMq((ctx, cfg) =>

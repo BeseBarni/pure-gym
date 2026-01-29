@@ -3,6 +3,25 @@ networks:
     driver: bridge
 
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # RabbitMQ communication port
+      - "15672:15672" # Management UI port
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - dev
   puregym-db:
     image: postgres:16-alpine
     container_name: puregym-db
@@ -32,6 +51,8 @@ services:
     depends_on:
       puregym-db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     container_name: puregym-api
     ports:
       - "5000:8080"
@@ -49,6 +70,9 @@ services:
       - Facebook__AppId=your-facebook-app-id
       - Facebook__AppSecret=your-facebook-app-secret
       - GymEntry__EntryKeyCacheTime=30
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest 
     networks:
       - dev
     restart: unless-stopped
@@ -65,14 +89,17 @@ services:
       context: .
       dockerfile: PureGym.Mock.RevolvingDoor/Dockerfile
     container_name: puregym-mock-door
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "5100:8090"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8090
-      - GymApi__BaseUrl=http://puregym-api:8080
-      - GymApi__VerifyEndpoint=api/gym/enter
-      - GymApi__TimeoutSeconds=10
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest 
     networks:
       - dev
     restart: unless-stopped
@@ -84,5 +111,7 @@ services:
       start_period: 40s
   
 volumes:
+  rabbitmq_data:
+    driver: local  
   puregym_data:
     driver: local

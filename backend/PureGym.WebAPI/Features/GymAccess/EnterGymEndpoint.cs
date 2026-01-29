@@ -1,10 +1,11 @@
 using FastEndpoints;
 using MediatR;
 using PureGym.Application.Features.GymAccess;
+using PureGym.Application.Models;
 
 namespace PureGym.WebAPI.Features.GymAccess;
 
-public sealed class EnterGymEndpoint : Endpoint<EnterGym.Request, EnterGym.Response>
+public sealed class EnterGymEndpoint : Endpoint<EnterGym.Request, Result<EnterGym.Response>>
 {
     public override void Configure()
     {
@@ -20,7 +21,7 @@ public sealed class EnterGymEndpoint : Endpoint<EnterGym.Request, EnterGym.Respo
     public override async Task HandleAsync(EnterGym.Request req, CancellationToken ct)
     {
         var mediator = Resolve<IMediator>();
-        var command = new EnterGym.Command(req.MemberId);
+        var command = new EnterGym.Command(req.MemberId, req.AccessKey);
         var result = await mediator.Send(command, ct);
         Response = result;
     }
