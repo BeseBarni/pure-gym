@@ -35,17 +35,49 @@ services:
     container_name: puregym-api
     ports:
       - "5000:8080"
-      - "5001:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
       - Database__ConnectionString=Host=puregym-db;Port=5432;Database=puregym;Username=postgres;Password=Password123!;Include Error Detail=true
       - APPLY_MIGRATIONS=true
+      - JwtSettings__Secret=YourSecretKeyHere-MustBe32CharactersOrMore-ChangeInProduction
+      - JwtSettings__Issuer=PureGymAPI
+      - JwtSettings__Audience=PureGymClient
+      - JwtSettings__ExpiryMinutes=60
+      - Google__ClientId=your-google-client-id
+      - Google__ClientSecret=your-google-client-secret
+      - Facebook__AppId=your-facebook-app-id
+      - Facebook__AppSecret=your-facebook-app-secret
+      - GymEntry__EntryKeyCacheTime=30
     networks:
       - dev
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
+  
+  puregym.mock.revolvingdoor:
+    image: ${DOCKER_REGISTRY-}puregym-mock-revolvingdoor
+    build:
+      context: .
+      dockerfile: PureGym.Mock.RevolvingDoor/Dockerfile
+    container_name: puregym-mock-door
+    ports:
+      - "5100:8090"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8090
+      - GymApi__BaseUrl=http://puregym-api:8080
+      - GymApi__VerifyEndpoint=api/gym/enter
+      - GymApi__TimeoutSeconds=10
+    networks:
+      - dev
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8090/health || exit 1"]
       interval: 30s
       timeout: 3s
       retries: 3

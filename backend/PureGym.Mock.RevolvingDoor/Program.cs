@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using PureGym.Mock.RevolvingDoor;
 using PureGym.SharedKernel.DTOs;
+using Scalar.AspNetCore;
 
 const string GYM_API = "GymApi";
 
@@ -18,12 +19,16 @@ builder.Services.AddHttpClient(GYM_API, (serviceProvider, client) =>
     client.BaseAddress = new Uri(settings.BaseUrl);
     client.Timeout = TimeSpan.FromSeconds(settings.TimeoutSeconds);
 });
+builder.Services.AddHealthChecks();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
+
+app.MapHealthChecks("/health");
 
 app.MapPost("/scan", async ([FromBody] VerifyAccessRequest request, IHttpClientFactory factory, IOptions<GymApiSettings> options) =>
 {
