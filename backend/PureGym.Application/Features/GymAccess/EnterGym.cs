@@ -1,24 +1,23 @@
 using FluentValidation;
+using MassTransit;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using PureGym.Application.Interfaces;
-using PureGym.Domain.Entities;
-using PureGym.Domain.Enums;
+using PureGym.Application.Interfaces.Services;
+using PureGym.Application.Models;
+using PureGym.SharedKernel.Constants;
+using PureGym.SharedKernel.Events;
+using PureGym.SharedKernel.Models;
 
 namespace PureGym.Application.Features.GymAccess;
 
 public static class EnterGym
 {
-    public sealed record Request(Guid MemberId);
+    public sealed record Request(Guid MemberId, string AccessKey);
 
-    public sealed record Command(Guid MemberId) : IRequest<Response>;
+    public sealed record Command(Guid MemberId, string AccessKey) : IRequest<Result<Response>>;
 
     public sealed record Response(
-        Guid AccessLogId,
         Guid MemberId,
-        AccessResult Result,
-        DateTime AccessedAtUtc,
-        bool WasGranted);
+        DateTime AccessedAtUtc);
 
     public sealed class CommandValidator : AbstractValidator<Command>
     {
@@ -27,41 +26,48 @@ public static class EnterGym
             RuleFor(x => x.MemberId)
                 .NotEmpty()
                 .WithMessage("Member ID is required.");
+            RuleFor(x => x.AccessKey)
+                .NotEmpty()
+                .WithMessage("AccessKey is required.");
         }
     }
 
-    public sealed class Handler : IRequestHandler<Command, Response>
+    public sealed class Handler : IRequestHandler<Command, Result<Response>>
     {
-        private readonly IApplicationDbContext _context;
-
-        public Handler(IApplicationDbContext context)
+        private readonly ICacheService _cacheService;
+        private readonly IPublishEndpoint _publishEndpoint;
+        public Handler(ICacheService cacheService, IPublishEndpoint publishEndpoint)
         {
-            _context = context;
+            _cacheService = cacheService;
+            _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Response>> Handle(Command request, CancellationToken ct)
         {
-            var member = await _context.Members
-                .Include(m => m.Memberships)
-                    .ThenInclude(ms => ms.MembershipType)
-                .FirstOrDefaultAsync(m => m.Id == request.MemberId, cancellationToken);
+            var key = CacheKeys.MemberAccess(request.MemberId);
 
-            if (member is null)
+            var cachedAccessKey = await _cacheService.GetAsync<CachedEntry<string>>(key, ct);
+
+            if (cachedAccessKey is null || cachedAccessKey.ExpiresAt < DateTime.UtcNow || cachedAccessKey.Data != request.AccessKey)
             {
-                throw new KeyNotFoundException($"Member with ID '{request.MemberId}' was not found.");
+                await _cacheService.RemoveAsync(key, ct);
+                return Result<Response>.Failure(new Error("AC1", "Entrance denied, access key doesnt match."));
             }
 
-            var accessLog = GymAccessLog.Record(member);
+            var accessedAt = DateTime.UtcNow;
 
-            _context.GymAccessLogs.Add(accessLog);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _publishEndpoint.Publish(
+                new GymAccessGrantedEvent(
+                    request.MemberId,
+                    accessedAt),
+                ct);
 
-            return new Response(
-                accessLog.Id,
-                member.Id,
-                accessLog.Result,
-                accessLog.AccessedAtUtc,
-                accessLog.WasGranted());
+            var response = new Response(
+                request.MemberId,
+                accessedAt
+            );
+
+            return Result<Response>.Success(response);
         }
     }
 }

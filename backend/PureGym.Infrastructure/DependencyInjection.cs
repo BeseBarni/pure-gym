@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,10 +24,33 @@ public static class DependencyInjection
 
         var dbConnection = configuration.GetSection(DatabaseSettings.SectionName)?.Get<DatabaseSettings>()?.ConnectionString ?? throw new InvalidOperationException($"{DatabaseSettings.SectionName} configuration value cannot be null");
 
+        var rabbitMqSettings = configuration.GetSection(RabbitMQSettings.SectionName).Get<RabbitMQSettings>()
+            ?? throw new InvalidOperationException("RabbitMQ settings are not configured");
+
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(dbConnection));
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
+        services.AddMassTransit(x =>
+        {
+            x.AddEntityFrameworkOutbox<ApplicationDbContext>(o =>
+            {
+                o.QueryDelay = TimeSpan.FromSeconds(1);
+                o.UsePostgres();
+                o.DisableInboxCleanupService();
+            });
+
+            x.UsingRabbitMq((ctx, cfg) =>
+            {
+                cfg.Host(rabbitMqSettings.Host, "/", h =>
+                {
+                    h.Username(rabbitMqSettings.UserName);
+                    h.Password(rabbitMqSettings.Password);
+                });
+                cfg.ConfigureEndpoints(ctx);
+            });
+        });
 
         services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
         {
