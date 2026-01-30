@@ -1,3 +1,8 @@
 ﻿namespace PureGym.SharedKernel.Models;
 
-public sealed record CachedEntry<T>(T Data, DateTime ExpiresAt);
+public sealed class CachedEntry<T>
+{
+    public T? Data { get; init; }
+    public DateTime? ExpiresAt { get; init; }
+    public bool IsExpired => ExpiresAt.HasValue && DateTime.UtcNow >= ExpiresAt.Value;
+}

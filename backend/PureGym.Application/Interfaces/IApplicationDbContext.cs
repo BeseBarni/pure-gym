@@ -10,5 +10,7 @@ public interface IApplicationDbContext
     DbSet<MembershipType> MembershipTypes { get; }
     DbSet<GymAccessLog> GymAccessLogs { get; }
 
+    DbSet<TEntity> Set<TEntity>() where TEntity : class;
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -1,5 +1,6 @@
 using MassTransit;
 using PureGym.Mock.RevolvingDoor;
+using PureGym.SharedKernel.Events;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,8 +26,8 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint("revolving-door", e =>
         {
             e.ConfigureConsumer<GymAccessGrantedConsumer>(ctx);
+            e.Bind<GymAccessGrantedEvent>(); // Bind to the message exchange
         });
-        cfg.ConfigureEndpoints(ctx);
     });
 });
 

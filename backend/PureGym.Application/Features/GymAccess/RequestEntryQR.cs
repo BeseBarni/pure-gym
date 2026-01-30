@@ -5,7 +5,6 @@ using PureGym.Application.Interfaces.Requests;
 using PureGym.Application.Interfaces.Services;
 using PureGym.Application.Settings;
 using PureGym.SharedKernel.Constants;
-using PureGym.SharedKernel.Models;
 
 namespace PureGym.Application.Features.GymAccess;
 
@@ -13,7 +12,7 @@ public static class RequestEntryQR
 {
     public sealed record Request(Guid MemberId);
     public sealed record Command(Guid MemberId) : IRequest<Response>, IMemberRequest;
-    public sealed record Response(Guid MemberId, string EntryCode, DateTime expiry);
+    public sealed record Response(Guid MemberId, string? EntryCode, DateTime? Expiry);
 
     public sealed class CommandValidator : AbstractValidator<Command>
     {
@@ -46,9 +45,7 @@ public static class RequestEntryQR
                 factory: () =>
                 {
                     var code = Guid.NewGuid().ToString("N")[..6].ToUpper();
-                    var expiry = DateTime.UtcNow.Add(ttl);
-
-                    return Task.FromResult(new CachedEntry<string>(code, expiry));
+                    return Task.FromResult(code);
                 },
                 expiration: ttl,
                 cancellationToken: cancellationToken

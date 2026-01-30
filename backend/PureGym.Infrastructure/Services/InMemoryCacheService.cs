@@ -1,38 +1,41 @@
 ﻿using PureGym.Application.Interfaces.Services;
+using PureGym.Infrastructure.Extensions;
+using PureGym.SharedKernel.Models;
 using System.Collections.Concurrent;
 
 namespace PureGym.Infrastructure.Services;
 
 internal class InMemoryCacheService : ICacheService
 {
-    private readonly ConcurrentDictionary<string, CacheEntry> _cache = new();
+    private readonly ConcurrentDictionary<string, CachedEntry<object>> _cache = new();
     private readonly SemaphoreSlim _semaphore = new(1, 1);
 
-    public Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default)
+    public Task<CachedEntry<T>?> GetAsync<T>(string key, CancellationToken cancellationToken = default) where T : class
     {
         if (_cache.TryGetValue(key, out var entry))
         {
             if (!entry.IsExpired)
             {
-                return Task.FromResult((T?)entry.Value);
+                return Task.FromResult(entry?.GetCacheEntry<T>());
             }
 
             _cache.TryRemove(key, out _);
         }
 
-        return Task.FromResult<T?>(default);
+        return Task.FromResult<CachedEntry<T>?>(default);
     }
 
-    public Task SetAsync<T>(string key, T value, TimeSpan? expiration = null, CancellationToken cancellationToken = default)
+    public Task<CachedEntry<T>> SetAsync<T>(string key, T value, TimeSpan? expiration = null, CancellationToken cancellationToken = default)
+        where T : class
     {
-        var entry = new CacheEntry
+        var entry = new CachedEntry<object>
         {
-            Value = value,
+            Data = value,
             ExpiresAt = expiration.HasValue ? DateTime.UtcNow.Add(expiration.Value) : null
         };
 
         _cache.AddOrUpdate(key, entry, (_, _) => entry);
-        return Task.CompletedTask;
+        return Task.FromResult(entry.GetCacheEntry<T>());
     }
 
     public Task RemoveAsync(string key, CancellationToken cancellationToken = default)
@@ -41,7 +44,8 @@ internal class InMemoryCacheService : ICacheService
         return Task.CompletedTask;
     }
 
-    public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan? expiration = null, CancellationToken cancellationToken = default)
+    public async Task<CachedEntry<T>> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan? expiration = null, CancellationToken cancellationToken = default)
+        where T : class
     {
         var cached = await GetAsync<T>(key, cancellationToken);
         if (cached != null)
@@ -59,8 +63,8 @@ internal class InMemoryCacheService : ICacheService
             }
 
             var value = await factory();
-            await SetAsync(key, value, expiration, cancellationToken);
-            return value;
+            var result = await SetAsync(key, value, expiration, cancellationToken);
+            return result;
         }
         finally
         {
@@ -87,12 +91,5 @@ internal class InMemoryCacheService : ICacheService
     {
         _cache.Clear();
         return Task.CompletedTask;
-    }
-
-    private class CacheEntry
-    {
-        public object? Value { get; init; }
-        public DateTime? ExpiresAt { get; init; }
-        public bool IsExpired => ExpiresAt.HasValue && DateTime.UtcNow >= ExpiresAt.Value;
     }
 }

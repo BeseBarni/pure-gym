@@ -1,11 +1,11 @@
 using FluentValidation;
 using MassTransit;
 using MediatR;
+using PureGym.Application.Interfaces;
 using PureGym.Application.Interfaces.Services;
 using PureGym.Application.Models;
 using PureGym.SharedKernel.Constants;
 using PureGym.SharedKernel.Events;
-using PureGym.SharedKernel.Models;
 
 namespace PureGym.Application.Features.GymAccess;
 
@@ -36,19 +36,22 @@ public static class EnterGym
     {
         private readonly ICacheService _cacheService;
         private readonly IPublishEndpoint _publishEndpoint;
-        public Handler(ICacheService cacheService, IPublishEndpoint publishEndpoint)
+        private readonly IApplicationDbContext _dbContext;
+
+        public Handler(ICacheService cacheService, IPublishEndpoint publishEndpoint, IApplicationDbContext dbContext)
         {
             _cacheService = cacheService;
             _publishEndpoint = publishEndpoint;
+            _dbContext = dbContext;
         }
 
         public async Task<Result<Response>> Handle(Command request, CancellationToken ct)
         {
             var key = CacheKeys.MemberAccess(request.MemberId);
 
-            var cachedAccessKey = await _cacheService.GetAsync<CachedEntry<string>>(key, ct);
+            var cachedAccessKey = await _cacheService.GetAsync<string>(key, ct);
 
-            if (cachedAccessKey is null || cachedAccessKey.ExpiresAt < DateTime.UtcNow || cachedAccessKey.Data != request.AccessKey)
+            if (cachedAccessKey is null || cachedAccessKey.IsExpired || cachedAccessKey.Data != request.AccessKey)
             {
                 await _cacheService.RemoveAsync(key, ct);
                 return Result<Response>.Failure(new Error("AC1", "Entrance denied, access key doesnt match."));
@@ -61,6 +64,9 @@ public static class EnterGym
                     request.MemberId,
                     accessedAt),
                 ct);
+
+            // This commits both the log AND delivers the outbox message
+            await _dbContext.SaveChangesAsync(ct);
 
             var response = new Response(
                 request.MemberId,

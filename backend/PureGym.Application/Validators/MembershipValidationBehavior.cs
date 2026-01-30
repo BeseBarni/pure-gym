@@ -17,7 +17,10 @@ public sealed class MembershipValidationBehavior<TRequest, TResponse>
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        var member = await _context.Members.FirstOrDefaultAsync(p => p.Id == request.MemberId);
+        var member = await _context
+            .Members
+            .Include(p => p.Memberships)
+            .FirstOrDefaultAsync(p => p.Id == request.MemberId);
 
         if (member is null) throw new UnauthorizedAccessException("Active membership required.");
 
