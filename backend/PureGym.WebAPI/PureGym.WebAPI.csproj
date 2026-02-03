@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PureGym.Application\PureGym.Application.csproj" />
     <ProjectReference Include="..\PureGym.Infrastructure\PureGym.Infrastructure.csproj" />
+    <ProjectReference Include="..\PureGym.SharedKernel\PureGym.SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>

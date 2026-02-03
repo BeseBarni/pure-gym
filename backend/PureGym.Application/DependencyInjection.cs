@@ -2,9 +2,9 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using PureGym.Application.Features.Common;
-using PureGym.Application.Models;
 using PureGym.Application.Validators;
 using PureGym.Domain.Entities;
+using PureGym.SharedKernel.Models;
 
 namespace PureGym.Application;
 

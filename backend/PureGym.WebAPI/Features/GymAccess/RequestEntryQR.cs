@@ -33,6 +33,6 @@ public sealed class RequestEntryQREndpoint : Endpoint<RequestEntryQRRequest, Req
 
         var result = await _mediator.Send(command, ct);
 
-        await Send.OkAsync(result);
+        await Send.OkAsync(result.Value);
     }
 }
