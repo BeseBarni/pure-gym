@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PureGym.Application.Interfaces.Services;
-using PureGym.Infrastructure.Settings;
+using PureGym.SharedKernel.Settings;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

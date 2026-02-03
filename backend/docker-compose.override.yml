@@ -1,10 +1,36 @@
 services:
+  puregym-db:
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password123!
+      POSTGRES_DB: puregym
+  rabbitmq:
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
   puregym.webapi:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - Database__ConnectionString=Host=puregym-db;Port=5432;Database=puregym;Username=postgres;Password=Password123!;Include Error Detail=true
+      - APPLY_MIGRATIONS=true
+      - JwtSettings__Secret=YourSecretKeyHere-MustBe32CharactersOrMore-ChangeInProduction
+      - JwtSettings__Issuer=PureGymAPI
+      - JwtSettings__Audience=PureGymClient
+      - JwtSettings__ExpiryMinutes=60
+      - Google__ClientId=your-google-client-id
+      - Google__ClientSecret=your-google-client-secret
+      - Facebook__AppId=your-facebook-app-id
+      - Facebook__AppSecret=your-facebook-app-secret
+      - GymEntry__EntryKeyCacheTime=30
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest 
 
   puregym.mock.revolvingdoor:
     volumes:
@@ -12,3 +38,9 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8090
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest 

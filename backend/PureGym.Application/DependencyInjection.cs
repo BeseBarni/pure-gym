@@ -1,6 +1,5 @@
 using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PureGym.Application.Features.Common;
 using PureGym.Application.Models;
@@ -11,9 +10,8 @@ namespace PureGym.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddGeneratedSettings(configuration);
         var assembly = typeof(DependencyInjection).Assembly;
 
         services.AddMediatR(cfg =>

@@ -1,7 +1,7 @@
 using PureGym.SharedKernel.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace PureGym.Infrastructure.Settings;
+namespace PureGym.SharedKernel.Settings;
 
 public class JwtSettings : ISettings
 {
