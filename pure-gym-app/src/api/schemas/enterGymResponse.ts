@@ -6,7 +6,7 @@
  * OpenAPI spec version: v1
  */
 
-export interface PureGymApplicationFeaturesGymAccessEnterGymResponse {
+export interface EnterGymResponse {
   memberId?: string
   accessedAtUtc?: string
 }

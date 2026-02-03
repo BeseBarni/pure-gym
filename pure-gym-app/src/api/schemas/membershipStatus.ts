@@ -6,10 +6,9 @@
  * OpenAPI spec version: v1
  */
 
-export type PureGymDomainEnumsMembershipStatus =
-  (typeof PureGymDomainEnumsMembershipStatus)[keyof typeof PureGymDomainEnumsMembershipStatus]
+export type MembershipStatus = (typeof MembershipStatus)[keyof typeof MembershipStatus]
 
-export const PureGymDomainEnumsMembershipStatus = {
+export const MembershipStatus = {
   Active: 0,
   Expired: 1,
   Cancelled: 2,

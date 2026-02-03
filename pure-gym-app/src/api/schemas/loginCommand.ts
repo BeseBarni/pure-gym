@@ -6,8 +6,7 @@
  * OpenAPI spec version: v1
  */
 
-export interface PureGymDomainEntitiesBaseSoftDeletableEntity {
-  isDeleted?: boolean
-  /** @nullable */
-  deletedAtUtc?: string | null
+export interface LoginCommand {
+  email?: string
+  password?: string
 }

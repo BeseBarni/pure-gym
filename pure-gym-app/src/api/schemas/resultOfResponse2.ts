@@ -5,10 +5,12 @@
  * API for 0-24 gym system
  * OpenAPI spec version: v1
  */
-import type { PureGymApplicationModelsError } from './pureGymApplicationModelsError'
+import type { EnterGymResponse } from './enterGymResponse'
+import type { Error } from './error'
 
-export interface PureGymApplicationModelsResult {
+export interface ResultOfResponse2 {
   isSuccess?: boolean
   isFailure?: boolean
-  error?: PureGymApplicationModelsError
+  error?: Error
+  value?: EnterGymResponse | null
 }

@@ -6,10 +6,9 @@
  * OpenAPI spec version: v1
  */
 
-export type PureGymDomainEnumsAccessResult =
-  (typeof PureGymDomainEnumsAccessResult)[keyof typeof PureGymDomainEnumsAccessResult]
+export type AccessResult = (typeof AccessResult)[keyof typeof AccessResult]
 
-export const PureGymDomainEnumsAccessResult = {
+export const AccessResult = {
   Granted: 0,
   DeniedExpired: 1,
   DeniedSuspended: 2,

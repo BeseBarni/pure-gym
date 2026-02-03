@@ -5,8 +5,9 @@
  * API for 0-24 gym system
  * OpenAPI spec version: v1
  */
+import type { Member } from './member'
 
-export interface PureGymApplicationFeaturesMembershipAddMembershipRequest {
-  memberId?: string
-  membershipTypeId?: string
+export interface ListQueryOfMember {
+  items?: Member[]
+  totalCount?: number
 }

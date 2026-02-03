@@ -1,4 +1,5 @@
-import { usePureGymWebAPIFeaturesMembersListMembersEndpoint } from '@/api/puregym.gen';
+
+import { useListMembersEndpoint } from '@/api/puregym.gen';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shadcn/card'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -7,7 +8,7 @@ export const Route = createFileRoute('/')({
 })
 
 function RouteComponent() {
-  const {data} = usePureGymWebAPIFeaturesMembersListMembersEndpoint();
+  const {data} = useListMembersEndpoint();
   return (
     <div className="bg-background flex min-h-screen flex-col items-center justify-center space-y-8 p-6">
       <div className="max-w-2xl space-y-4 text-center">

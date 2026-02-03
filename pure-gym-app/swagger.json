@@ -14,14 +14,14 @@
         ],
         "summary": "List all members",
         "description": "Returns a list of all active (non-deleted) members.",
-        "operationId": "PureGymWebAPIFeaturesMembersListMembersEndpoint",
+        "operationId": "ListMembersEndpoint",
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PureGymApplicationFeaturesCommonListQueryOfMember"
+                  "$ref": "#/components/schemas/ListQueryOfMember"
                 }
               }
             }
@@ -36,14 +36,14 @@
         ],
         "summary": "Add a membership to a member",
         "description": "Creates a new membership for a member based on the specified membership type.",
-        "operationId": "PureGymWebAPIFeaturesMembershipAddMembershipEndpoint",
+        "operationId": "AddMembershipEndpoint",
         "requestBody": {
           "x-name": "Request",
           "description": "",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PureGymApplicationFeaturesMembershipAddMembership_Request"
+                "$ref": "#/components/schemas/AddMembership_Request"
               }
             }
           },
@@ -56,7 +56,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PureGymApplicationModelsResultOfResponse"
+                  "$ref": "#/components/schemas/ResultOfResponse"
                 }
               }
             }
@@ -71,14 +71,14 @@
         ],
         "summary": "List all memberships",
         "description": "Returns a list of all active (non-deleted) memberships.",
-        "operationId": "PureGymWebAPIFeaturesMembershipListMembershipsEndpoint",
+        "operationId": "ListMembershipsEndpoint",
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PureGymApplicationFeaturesCommonListQueryOfMembership"
+                  "$ref": "#/components/schemas/ListQueryOfMembership"
                 }
               }
             }
@@ -93,14 +93,14 @@
         ],
         "summary": "List all membership types",
         "description": "Returns a list of all active (non-deleted) membership types.",
-        "operationId": "PureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint",
+        "operationId": "ListMembershipTypesEndpoint",
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PureGymApplicationFeaturesCommonListQueryOfMembershipType"
+                  "$ref": "#/components/schemas/ListQueryOfMembershipType"
                 }
               }
             }
@@ -115,14 +115,14 @@
         ],
         "summary": "Record a gym entry attempt",
         "description": "Records an attempt by a member to enter the gym and returns whether access was granted.",
-        "operationId": "PureGymWebAPIFeaturesGymAccessEnterGymEndpoint",
+        "operationId": "EnterGymEndpoint",
         "requestBody": {
           "x-name": "Request",
           "description": "",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PureGymApplicationFeaturesGymAccessEnterGym_Request"
+                "$ref": "#/components/schemas/EnterGym_Request"
               }
             }
           },
@@ -135,7 +135,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PureGymApplicationModelsResultOfResponse2"
+                  "$ref": "#/components/schemas/ResultOfResponse2"
                 }
               }
             }
@@ -150,14 +150,14 @@
         ],
         "summary": "List all gym access logs",
         "description": "Returns a list of all gym access logs.",
-        "operationId": "PureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint",
+        "operationId": "ListGymAccessLogsEndpoint",
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PureGymApplicationFeaturesCommonListQueryOfGymAccessLog"
+                  "$ref": "#/components/schemas/ListQueryOfGymAccessLog"
                 }
               }
             }
@@ -170,7 +170,7 @@
         "tags": [
           "Gym"
         ],
-        "operationId": "PureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint",
+        "operationId": "RequestEntryQREndpoint",
         "parameters": [
           {
             "name": "memberId",
@@ -188,7 +188,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PureGymApplicationFeaturesGymAccessRequestEntryQR_Response"
+                  "$ref": "#/components/schemas/RequestEntryQR_Response"
                 }
               }
             }
@@ -211,14 +211,14 @@
         ],
         "summary": "Authenticate a user",
         "description": "Authenticates a user with email and password and returns a JWT token.",
-        "operationId": "PureGymWebAPIFeaturesAuthenticationLoginEndpoint",
+        "operationId": "LoginEndpoint",
         "requestBody": {
           "x-name": "Command",
           "description": "",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PureGymApplicationFeaturesAuthenticationLogin_Command"
+                "$ref": "#/components/schemas/Login_Command"
               }
             }
           },
@@ -231,7 +231,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PureGymApplicationFeaturesAuthenticationLogin_Response"
+                  "$ref": "#/components/schemas/Login_Response"
                 }
               }
             }
@@ -246,14 +246,14 @@
         ],
         "summary": "Register a new user",
         "description": "Creates a new user account and member profile, then returns a JWT token.",
-        "operationId": "PureGymWebAPIFeaturesAuthenticationRegisterEndpoint",
+        "operationId": "RegisterEndpoint",
         "requestBody": {
           "x-name": "Command",
           "description": "",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PureGymApplicationFeaturesAuthenticationRegister_Command"
+                "$ref": "#/components/schemas/Register_Command"
               }
             }
           },
@@ -266,7 +266,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PureGymApplicationFeaturesAuthenticationRegister_Response"
+                  "$ref": "#/components/schemas/Register_Response"
                 }
               }
             }
@@ -277,14 +277,14 @@
   },
   "components": {
     "schemas": {
-      "PureGymApplicationFeaturesCommonListQueryOfMember": {
+      "ListQueryOfMember": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PureGymDomainEntitiesMember"
+              "$ref": "#/components/schemas/Member"
             }
           },
           "totalCount": {
@@ -293,116 +293,118 @@
           }
         }
       },
-      "PureGymDomainEntitiesMember": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PureGymDomainEntitiesBaseSoftDeletableEntity"
+      "Member": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isDeleted": {
+            "type": "boolean"
           },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "type": "string",
-                "format": "guid"
-              },
-              "firstName": {
-                "type": "string"
-              },
-              "lastName": {
-                "type": "string"
-              },
-              "email": {
-                "type": "string"
-              },
-              "phoneNumber": {
-                "type": "string",
-                "nullable": true
-              },
-              "dateOfBirth": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "createdAtUtc": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "memberships": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/PureGymDomainEntitiesMembership"
-                }
-              },
-              "accessLogs": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/PureGymDomainEntitiesGymAccessLog"
-                }
-              },
-              "fullName": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
-      "PureGymDomainEntitiesMembership": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PureGymDomainEntitiesBaseSoftDeletableEntity"
+          "deletedAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "type": "string",
-                "format": "guid"
-              },
-              "memberId": {
-                "type": "string",
-                "format": "guid"
-              },
-              "membershipTypeId": {
-                "type": "string",
-                "format": "guid"
-              },
-              "startDateUtc": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "endDateUtc": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "status": {
-                "$ref": "#/components/schemas/PureGymDomainEnumsMembershipStatus"
-              },
-              "createdAtUtc": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "member": {
-                "$ref": "#/components/schemas/PureGymDomainEntitiesMember"
-              },
-              "membershipType": {
-                "$ref": "#/components/schemas/PureGymDomainEntitiesMembershipType"
-              },
-              "accessLogs": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/PureGymDomainEntitiesGymAccessLog"
-                }
-              },
-              "daysRemaining": {
-                "type": "integer",
-                "format": "int32"
-              }
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "memberships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Membership"
             }
+          },
+          "accessLogs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GymAccessLog"
+            }
+          },
+          "fullName": {
+            "type": "string"
           }
-        ]
+        }
       },
-      "PureGymDomainEnumsMembershipStatus": {
+      "Membership": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "deletedAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "memberId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "membershipTypeId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "startDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MembershipStatus"
+          },
+          "createdAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "member": {
+            "$ref": "#/components/schemas/Member"
+          },
+          "membershipType": {
+            "$ref": "#/components/schemas/MembershipType"
+          },
+          "accessLogs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GymAccessLog"
+            }
+          },
+          "daysRemaining": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "MembershipStatus": {
         "type": "integer",
         "description": "",
         "x-enumNames": [
@@ -418,50 +420,8 @@
           3
         ]
       },
-      "PureGymDomainEntitiesMembershipType": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PureGymDomainEntitiesBaseSoftDeletableEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "type": "string",
-                "format": "guid"
-              },
-              "name": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string",
-                "nullable": true
-              },
-              "pricePerMonth": {
-                "type": "number",
-                "format": "decimal"
-              },
-              "durationInDays": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "isActive": {
-                "type": "boolean"
-              },
-              "memberships": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/PureGymDomainEntitiesMembership"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "PureGymDomainEntitiesBaseSoftDeletableEntity": {
+      "MembershipType": {
         "type": "object",
-        "x-abstract": true,
         "additionalProperties": false,
         "properties": {
           "isDeleted": {
@@ -471,10 +431,38 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "pricePerMonth": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "durationInDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "memberships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Membership"
+            }
           }
         }
       },
-      "PureGymDomainEntitiesGymAccessLog": {
+      "GymAccessLog": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -496,22 +484,22 @@
             "format": "date-time"
           },
           "result": {
-            "$ref": "#/components/schemas/PureGymDomainEnumsAccessResult"
+            "$ref": "#/components/schemas/AccessResult"
           },
           "member": {
-            "$ref": "#/components/schemas/PureGymDomainEntitiesMember"
+            "$ref": "#/components/schemas/Member"
           },
           "membership": {
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/PureGymDomainEntitiesMembership"
+                "$ref": "#/components/schemas/Membership"
               }
             ]
           }
         }
       },
-      "PureGymDomainEnumsAccessResult": {
+      "AccessResult": {
         "type": "integer",
         "description": "",
         "x-enumNames": [
@@ -527,28 +515,42 @@
           3
         ]
       },
-      "PureGymApplicationModelsResultOfResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PureGymApplicationModelsResult"
+      "ResultOfResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
           },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "value": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/PureGymApplicationFeaturesMembershipAddMembership_Response"
-                  }
-                ]
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AddMembership_Response"
               }
-            }
+            ]
           }
-        ]
+        }
       },
-      "PureGymApplicationFeaturesMembershipAddMembership_Response": {
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AddMembership_Response": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -576,38 +578,11 @@
             "format": "date-time"
           },
           "status": {
-            "$ref": "#/components/schemas/PureGymDomainEnumsMembershipStatus"
+            "$ref": "#/components/schemas/MembershipStatus"
           }
         }
       },
-      "PureGymApplicationModelsResult": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "isSuccess": {
-            "type": "boolean"
-          },
-          "isFailure": {
-            "type": "boolean"
-          },
-          "error": {
-            "$ref": "#/components/schemas/PureGymApplicationModelsError"
-          }
-        }
-      },
-      "PureGymApplicationModelsError": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          }
-        }
-      },
-      "PureGymApplicationFeaturesMembershipAddMembership_Request": {
+      "AddMembership_Request": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -621,14 +596,14 @@
           }
         }
       },
-      "PureGymApplicationFeaturesCommonListQueryOfMembership": {
+      "ListQueryOfMembership": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PureGymDomainEntitiesMembership"
+              "$ref": "#/components/schemas/Membership"
             }
           },
           "totalCount": {
@@ -637,14 +612,14 @@
           }
         }
       },
-      "PureGymApplicationFeaturesCommonListQueryOfMembershipType": {
+      "ListQueryOfMembershipType": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PureGymDomainEntitiesMembershipType"
+              "$ref": "#/components/schemas/MembershipType"
             }
           },
           "totalCount": {
@@ -653,28 +628,30 @@
           }
         }
       },
-      "PureGymApplicationModelsResultOfResponse2": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PureGymApplicationModelsResult"
+      "ResultOfResponse2": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
           },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "value": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/PureGymApplicationFeaturesGymAccessEnterGym_Response"
-                  }
-                ]
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnterGym_Response"
               }
-            }
+            ]
           }
-        ]
+        }
       },
-      "PureGymApplicationFeaturesGymAccessEnterGym_Response": {
+      "EnterGym_Response": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -688,7 +665,7 @@
           }
         }
       },
-      "PureGymApplicationFeaturesGymAccessEnterGym_Request": {
+      "EnterGym_Request": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -701,14 +678,14 @@
           }
         }
       },
-      "PureGymApplicationFeaturesCommonListQueryOfGymAccessLog": {
+      "ListQueryOfGymAccessLog": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PureGymDomainEntitiesGymAccessLog"
+              "$ref": "#/components/schemas/GymAccessLog"
             }
           },
           "totalCount": {
@@ -717,7 +694,7 @@
           }
         }
       },
-      "PureGymApplicationFeaturesGymAccessRequestEntryQR_Response": {
+      "RequestEntryQR_Response": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -736,11 +713,7 @@
           }
         }
       },
-      "PureGymWebAPIFeaturesGymAccessRequestEntryQRRequest": {
-        "type": "object",
-        "additionalProperties": false
-      },
-      "PureGymApplicationFeaturesAuthenticationLogin_Response": {
+      "Login_Response": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -756,7 +729,7 @@
           }
         }
       },
-      "PureGymApplicationFeaturesAuthenticationLogin_Command": {
+      "Login_Command": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -768,7 +741,7 @@
           }
         }
       },
-      "PureGymApplicationFeaturesAuthenticationRegister_Response": {
+      "Register_Response": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -784,7 +757,7 @@
           }
         }
       },
-      "PureGymApplicationFeaturesAuthenticationRegister_Command": {
+      "Register_Command": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

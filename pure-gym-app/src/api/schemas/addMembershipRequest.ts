@@ -6,7 +6,7 @@
  * OpenAPI spec version: v1
  */
 
-export interface PureGymApplicationFeaturesAuthenticationLoginCommand {
-  email?: string
-  password?: string
+export interface AddMembershipRequest {
+  memberId?: string
+  membershipTypeId?: string
 }

@@ -24,19 +24,19 @@ import {
 
 import { axiosInstance, type BodyType, type ErrorType } from '../lib/api-client'
 import type {
-  PureGymApplicationFeaturesAuthenticationLoginCommand,
-  PureGymApplicationFeaturesAuthenticationLoginResponse,
-  PureGymApplicationFeaturesAuthenticationRegisterCommand,
-  PureGymApplicationFeaturesAuthenticationRegisterResponse,
-  PureGymApplicationFeaturesCommonListQueryOfGymAccessLog,
-  PureGymApplicationFeaturesCommonListQueryOfMember,
-  PureGymApplicationFeaturesCommonListQueryOfMembership,
-  PureGymApplicationFeaturesCommonListQueryOfMembershipType,
-  PureGymApplicationFeaturesGymAccessEnterGymRequest,
-  PureGymApplicationFeaturesGymAccessRequestEntryQRResponse,
-  PureGymApplicationFeaturesMembershipAddMembershipRequest,
-  PureGymApplicationModelsResultOfResponse,
-  PureGymApplicationModelsResultOfResponse2,
+  AddMembershipRequest,
+  EnterGymRequest,
+  ListQueryOfGymAccessLog,
+  ListQueryOfMember,
+  ListQueryOfMembership,
+  ListQueryOfMembershipType,
+  LoginCommand,
+  LoginResponse,
+  RegisterCommand,
+  RegisterResponse,
+  RequestEntryQRResponse,
+  ResultOfResponse,
+  ResultOfResponse2,
 } from './schemas'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
@@ -45,71 +45,56 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
  * Returns a list of all active (non-deleted) members.
  * @summary List all members
  */
-export const pureGymWebAPIFeaturesMembersListMembersEndpoint = (
+export const listMembersEndpoint = (
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
-  return axiosInstance<PureGymApplicationFeaturesCommonListQueryOfMember>(
-    { url: `/api/members`, method: 'GET', signal },
-    options,
-  )
+  return axiosInstance<ListQueryOfMember>({ url: `/api/members`, method: 'GET', signal }, options)
 }
 
-export const getPureGymWebAPIFeaturesMembersListMembersEndpointQueryKey = () => {
+export const getListMembersEndpointQueryKey = () => {
   return [`/api/members`] as const
 }
 
-export const getPureGymWebAPIFeaturesMembersListMembersEndpointQueryOptions = <
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
+export const getListMembersEndpointQueryOptions = <
+  TData = Awaited<ReturnType<typeof listMembersEndpoint>>,
   TError = ErrorType<unknown>,
 >(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
-      TError,
-      TData
-    >
-  >
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listMembersEndpoint>>, TError, TData>>
   request?: SecondParameter<typeof axiosInstance>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getPureGymWebAPIFeaturesMembersListMembersEndpointQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getListMembersEndpointQueryKey()
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>
-  > = ({ signal }) => pureGymWebAPIFeaturesMembersListMembersEndpoint(requestOptions, signal)
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listMembersEndpoint>>> = ({ signal }) =>
+    listMembersEndpoint(requestOptions, signal)
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
+    Awaited<ReturnType<typeof listMembersEndpoint>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type PureGymWebAPIFeaturesMembersListMembersEndpointQueryResult = NonNullable<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>
+export type ListMembersEndpointQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listMembersEndpoint>>
 >
-export type PureGymWebAPIFeaturesMembersListMembersEndpointQueryError = ErrorType<unknown>
+export type ListMembersEndpointQueryError = ErrorType<unknown>
 
-export function usePureGymWebAPIFeaturesMembersListMembersEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
+export function useListMembersEndpoint<
+  TData = Awaited<ReturnType<typeof listMembersEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options: {
     query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listMembersEndpoint>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
+          Awaited<ReturnType<typeof listMembersEndpoint>>,
           TError,
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>
+          Awaited<ReturnType<typeof listMembersEndpoint>>
         >,
         'initialData'
       >
@@ -117,23 +102,19 @@ export function usePureGymWebAPIFeaturesMembersListMembersEndpoint<
   },
   queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePureGymWebAPIFeaturesMembersListMembersEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
+export function useListMembersEndpoint<
+  TData = Awaited<ReturnType<typeof listMembersEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listMembersEndpoint>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
+          Awaited<ReturnType<typeof listMembersEndpoint>>,
           TError,
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>
+          Awaited<ReturnType<typeof listMembersEndpoint>>
         >,
         'initialData'
       >
@@ -141,18 +122,12 @@ export function usePureGymWebAPIFeaturesMembersListMembersEndpoint<
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePureGymWebAPIFeaturesMembersListMembersEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
+export function useListMembersEndpoint<
+  TData = Awaited<ReturnType<typeof listMembersEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
-        TError,
-        TData
-      >
-    >
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listMembersEndpoint>>, TError, TData>>
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
@@ -161,23 +136,17 @@ export function usePureGymWebAPIFeaturesMembersListMembersEndpoint<
  * @summary List all members
  */
 
-export function usePureGymWebAPIFeaturesMembersListMembersEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
+export function useListMembersEndpoint<
+  TData = Awaited<ReturnType<typeof listMembersEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembersListMembersEndpoint>>,
-        TError,
-        TData
-      >
-    >
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listMembersEndpoint>>, TError, TData>>
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getPureGymWebAPIFeaturesMembersListMembersEndpointQueryOptions(options)
+  const queryOptions = getListMembersEndpointQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -190,41 +159,41 @@ export function usePureGymWebAPIFeaturesMembersListMembersEndpoint<
  * Creates a new membership for a member based on the specified membership type.
  * @summary Add a membership to a member
  */
-export const pureGymWebAPIFeaturesMembershipAddMembershipEndpoint = (
-  pureGymApplicationFeaturesMembershipAddMembershipRequest: BodyType<PureGymApplicationFeaturesMembershipAddMembershipRequest>,
+export const addMembershipEndpoint = (
+  addMembershipRequest: BodyType<AddMembershipRequest>,
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
-  return axiosInstance<PureGymApplicationModelsResultOfResponse>(
+  return axiosInstance<ResultOfResponse>(
     {
       url: `/api/membership`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      data: pureGymApplicationFeaturesMembershipAddMembershipRequest,
+      data: addMembershipRequest,
       signal,
     },
     options,
   )
 }
 
-export const getPureGymWebAPIFeaturesMembershipAddMembershipEndpointMutationOptions = <
+export const getAddMembershipEndpointMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipAddMembershipEndpoint>>,
+    Awaited<ReturnType<typeof addMembershipEndpoint>>,
     TError,
-    { data: BodyType<PureGymApplicationFeaturesMembershipAddMembershipRequest> },
+    { data: BodyType<AddMembershipRequest> },
     TContext
   >
   request?: SecondParameter<typeof axiosInstance>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipAddMembershipEndpoint>>,
+  Awaited<ReturnType<typeof addMembershipEndpoint>>,
   TError,
-  { data: BodyType<PureGymApplicationFeaturesMembershipAddMembershipRequest> },
+  { data: BodyType<AddMembershipRequest> },
   TContext
 > => {
-  const mutationKey = ['pureGymWebAPIFeaturesMembershipAddMembershipEndpoint']
+  const mutationKey = ['addMembershipEndpoint']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -232,122 +201,106 @@ export const getPureGymWebAPIFeaturesMembershipAddMembershipEndpointMutationOpti
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipAddMembershipEndpoint>>,
-    { data: BodyType<PureGymApplicationFeaturesMembershipAddMembershipRequest> }
+    Awaited<ReturnType<typeof addMembershipEndpoint>>,
+    { data: BodyType<AddMembershipRequest> }
   > = (props) => {
     const { data } = props ?? {}
 
-    return pureGymWebAPIFeaturesMembershipAddMembershipEndpoint(data, requestOptions)
+    return addMembershipEndpoint(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PureGymWebAPIFeaturesMembershipAddMembershipEndpointMutationResult = NonNullable<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipAddMembershipEndpoint>>
+export type AddMembershipEndpointMutationResult = NonNullable<
+  Awaited<ReturnType<typeof addMembershipEndpoint>>
 >
-export type PureGymWebAPIFeaturesMembershipAddMembershipEndpointMutationBody =
-  BodyType<PureGymApplicationFeaturesMembershipAddMembershipRequest>
-export type PureGymWebAPIFeaturesMembershipAddMembershipEndpointMutationError = ErrorType<unknown>
+export type AddMembershipEndpointMutationBody = BodyType<AddMembershipRequest>
+export type AddMembershipEndpointMutationError = ErrorType<unknown>
 
 /**
  * @summary Add a membership to a member
  */
-export const usePureGymWebAPIFeaturesMembershipAddMembershipEndpoint = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
+export const useAddMembershipEndpoint = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipAddMembershipEndpoint>>,
+      Awaited<ReturnType<typeof addMembershipEndpoint>>,
       TError,
-      { data: BodyType<PureGymApplicationFeaturesMembershipAddMembershipRequest> },
+      { data: BodyType<AddMembershipRequest> },
       TContext
     >
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipAddMembershipEndpoint>>,
+  Awaited<ReturnType<typeof addMembershipEndpoint>>,
   TError,
-  { data: BodyType<PureGymApplicationFeaturesMembershipAddMembershipRequest> },
+  { data: BodyType<AddMembershipRequest> },
   TContext
 > => {
-  return useMutation(
-    getPureGymWebAPIFeaturesMembershipAddMembershipEndpointMutationOptions(options),
-    queryClient,
-  )
+  return useMutation(getAddMembershipEndpointMutationOptions(options), queryClient)
 }
 
 /**
  * Returns a list of all active (non-deleted) memberships.
  * @summary List all memberships
  */
-export const pureGymWebAPIFeaturesMembershipListMembershipsEndpoint = (
+export const listMembershipsEndpoint = (
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
-  return axiosInstance<PureGymApplicationFeaturesCommonListQueryOfMembership>(
+  return axiosInstance<ListQueryOfMembership>(
     { url: `/api/memberships`, method: 'GET', signal },
     options,
   )
 }
 
-export const getPureGymWebAPIFeaturesMembershipListMembershipsEndpointQueryKey = () => {
+export const getListMembershipsEndpointQueryKey = () => {
   return [`/api/memberships`] as const
 }
 
-export const getPureGymWebAPIFeaturesMembershipListMembershipsEndpointQueryOptions = <
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
+export const getListMembershipsEndpointQueryOptions = <
+  TData = Awaited<ReturnType<typeof listMembershipsEndpoint>>,
   TError = ErrorType<unknown>,
 >(options?: {
   query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
-      TError,
-      TData
-    >
+    UseQueryOptions<Awaited<ReturnType<typeof listMembershipsEndpoint>>, TError, TData>
   >
   request?: SecondParameter<typeof axiosInstance>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getPureGymWebAPIFeaturesMembershipListMembershipsEndpointQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getListMembershipsEndpointQueryKey()
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>
-  > = ({ signal }) => pureGymWebAPIFeaturesMembershipListMembershipsEndpoint(requestOptions, signal)
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listMembershipsEndpoint>>> = ({
+    signal,
+  }) => listMembershipsEndpoint(requestOptions, signal)
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
+    Awaited<ReturnType<typeof listMembershipsEndpoint>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type PureGymWebAPIFeaturesMembershipListMembershipsEndpointQueryResult = NonNullable<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>
+export type ListMembershipsEndpointQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listMembershipsEndpoint>>
 >
-export type PureGymWebAPIFeaturesMembershipListMembershipsEndpointQueryError = ErrorType<unknown>
+export type ListMembershipsEndpointQueryError = ErrorType<unknown>
 
-export function usePureGymWebAPIFeaturesMembershipListMembershipsEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
+export function useListMembershipsEndpoint<
+  TData = Awaited<ReturnType<typeof listMembershipsEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options: {
     query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listMembershipsEndpoint>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
+          Awaited<ReturnType<typeof listMembershipsEndpoint>>,
           TError,
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>
+          Awaited<ReturnType<typeof listMembershipsEndpoint>>
         >,
         'initialData'
       >
@@ -355,23 +308,19 @@ export function usePureGymWebAPIFeaturesMembershipListMembershipsEndpoint<
   },
   queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePureGymWebAPIFeaturesMembershipListMembershipsEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
+export function useListMembershipsEndpoint<
+  TData = Awaited<ReturnType<typeof listMembershipsEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listMembershipsEndpoint>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
+          Awaited<ReturnType<typeof listMembershipsEndpoint>>,
           TError,
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>
+          Awaited<ReturnType<typeof listMembershipsEndpoint>>
         >,
         'initialData'
       >
@@ -379,17 +328,13 @@ export function usePureGymWebAPIFeaturesMembershipListMembershipsEndpoint<
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePureGymWebAPIFeaturesMembershipListMembershipsEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
+export function useListMembershipsEndpoint<
+  TData = Awaited<ReturnType<typeof listMembershipsEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listMembershipsEndpoint>>, TError, TData>
     >
     request?: SecondParameter<typeof axiosInstance>
   },
@@ -399,24 +344,19 @@ export function usePureGymWebAPIFeaturesMembershipListMembershipsEndpoint<
  * @summary List all memberships
  */
 
-export function usePureGymWebAPIFeaturesMembershipListMembershipsEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
+export function useListMembershipsEndpoint<
+  TData = Awaited<ReturnType<typeof listMembershipsEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipListMembershipsEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listMembershipsEndpoint>>, TError, TData>
     >
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions =
-    getPureGymWebAPIFeaturesMembershipListMembershipsEndpointQueryOptions(options)
+  const queryOptions = getListMembershipsEndpointQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -429,83 +369,62 @@ export function usePureGymWebAPIFeaturesMembershipListMembershipsEndpoint<
  * Returns a list of all active (non-deleted) membership types.
  * @summary List all membership types
  */
-export const pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint = (
+export const listMembershipTypesEndpoint = (
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
-  return axiosInstance<PureGymApplicationFeaturesCommonListQueryOfMembershipType>(
+  return axiosInstance<ListQueryOfMembershipType>(
     { url: `/api/membership-types`, method: 'GET', signal },
     options,
   )
 }
 
-export const getPureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpointQueryKey = () => {
+export const getListMembershipTypesEndpointQueryKey = () => {
   return [`/api/membership-types`] as const
 }
 
-export const getPureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpointQueryOptions = <
-  TData = Awaited<
-    ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>
-  >,
+export const getListMembershipTypesEndpointQueryOptions = <
+  TData = Awaited<ReturnType<typeof listMembershipTypesEndpoint>>,
   TError = ErrorType<unknown>,
 >(options?: {
   query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>>,
-      TError,
-      TData
-    >
+    UseQueryOptions<Awaited<ReturnType<typeof listMembershipTypesEndpoint>>, TError, TData>
   >
   request?: SecondParameter<typeof axiosInstance>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getPureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpointQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getListMembershipTypesEndpointQueryKey()
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>>
-  > = ({ signal }) =>
-    pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint(requestOptions, signal)
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listMembershipTypesEndpoint>>> = ({
+    signal,
+  }) => listMembershipTypesEndpoint(requestOptions, signal)
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>>,
+    Awaited<ReturnType<typeof listMembershipTypesEndpoint>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type PureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpointQueryResult =
-  NonNullable<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>>
-  >
-export type PureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpointQueryError =
-  ErrorType<unknown>
+export type ListMembershipTypesEndpointQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listMembershipTypesEndpoint>>
+>
+export type ListMembershipTypesEndpointQueryError = ErrorType<unknown>
 
-export function usePureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint<
-  TData = Awaited<
-    ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>
-  >,
+export function useListMembershipTypesEndpoint<
+  TData = Awaited<ReturnType<typeof listMembershipTypesEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options: {
     query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listMembershipTypesEndpoint>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<
-            ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>
-          >,
+          Awaited<ReturnType<typeof listMembershipTypesEndpoint>>,
           TError,
-          Awaited<
-            ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>
-          >
+          Awaited<ReturnType<typeof listMembershipTypesEndpoint>>
         >,
         'initialData'
       >
@@ -513,29 +432,19 @@ export function usePureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoi
   },
   queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint<
-  TData = Awaited<
-    ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>
-  >,
+export function useListMembershipTypesEndpoint<
+  TData = Awaited<ReturnType<typeof listMembershipTypesEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listMembershipTypesEndpoint>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<
-            ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>
-          >,
+          Awaited<ReturnType<typeof listMembershipTypesEndpoint>>,
           TError,
-          Awaited<
-            ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>
-          >
+          Awaited<ReturnType<typeof listMembershipTypesEndpoint>>
         >,
         'initialData'
       >
@@ -543,19 +452,13 @@ export function usePureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoi
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint<
-  TData = Awaited<
-    ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>
-  >,
+export function useListMembershipTypesEndpoint<
+  TData = Awaited<ReturnType<typeof listMembershipTypesEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listMembershipTypesEndpoint>>, TError, TData>
     >
     request?: SecondParameter<typeof axiosInstance>
   },
@@ -565,26 +468,19 @@ export function usePureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoi
  * @summary List all membership types
  */
 
-export function usePureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint<
-  TData = Awaited<
-    ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>
-  >,
+export function useListMembershipTypesEndpoint<
+  TData = Awaited<ReturnType<typeof listMembershipTypesEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listMembershipTypesEndpoint>>, TError, TData>
     >
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions =
-    getPureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpointQueryOptions(options)
+  const queryOptions = getListMembershipTypesEndpointQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -597,41 +493,41 @@ export function usePureGymWebAPIFeaturesMembershipTypesListMembershipTypesEndpoi
  * Records an attempt by a member to enter the gym and returns whether access was granted.
  * @summary Record a gym entry attempt
  */
-export const pureGymWebAPIFeaturesGymAccessEnterGymEndpoint = (
-  pureGymApplicationFeaturesGymAccessEnterGymRequest: BodyType<PureGymApplicationFeaturesGymAccessEnterGymRequest>,
+export const enterGymEndpoint = (
+  enterGymRequest: BodyType<EnterGymRequest>,
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
-  return axiosInstance<PureGymApplicationModelsResultOfResponse2>(
+  return axiosInstance<ResultOfResponse2>(
     {
       url: `/api/gym/enter`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      data: pureGymApplicationFeaturesGymAccessEnterGymRequest,
+      data: enterGymRequest,
       signal,
     },
     options,
   )
 }
 
-export const getPureGymWebAPIFeaturesGymAccessEnterGymEndpointMutationOptions = <
+export const getEnterGymEndpointMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessEnterGymEndpoint>>,
+    Awaited<ReturnType<typeof enterGymEndpoint>>,
     TError,
-    { data: BodyType<PureGymApplicationFeaturesGymAccessEnterGymRequest> },
+    { data: BodyType<EnterGymRequest> },
     TContext
   >
   request?: SecondParameter<typeof axiosInstance>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessEnterGymEndpoint>>,
+  Awaited<ReturnType<typeof enterGymEndpoint>>,
   TError,
-  { data: BodyType<PureGymApplicationFeaturesGymAccessEnterGymRequest> },
+  { data: BodyType<EnterGymRequest> },
   TContext
 > => {
-  const mutationKey = ['pureGymWebAPIFeaturesGymAccessEnterGymEndpoint']
+  const mutationKey = ['enterGymEndpoint']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -639,123 +535,106 @@ export const getPureGymWebAPIFeaturesGymAccessEnterGymEndpointMutationOptions = 
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessEnterGymEndpoint>>,
-    { data: BodyType<PureGymApplicationFeaturesGymAccessEnterGymRequest> }
+    Awaited<ReturnType<typeof enterGymEndpoint>>,
+    { data: BodyType<EnterGymRequest> }
   > = (props) => {
     const { data } = props ?? {}
 
-    return pureGymWebAPIFeaturesGymAccessEnterGymEndpoint(data, requestOptions)
+    return enterGymEndpoint(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PureGymWebAPIFeaturesGymAccessEnterGymEndpointMutationResult = NonNullable<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessEnterGymEndpoint>>
+export type EnterGymEndpointMutationResult = NonNullable<
+  Awaited<ReturnType<typeof enterGymEndpoint>>
 >
-export type PureGymWebAPIFeaturesGymAccessEnterGymEndpointMutationBody =
-  BodyType<PureGymApplicationFeaturesGymAccessEnterGymRequest>
-export type PureGymWebAPIFeaturesGymAccessEnterGymEndpointMutationError = ErrorType<unknown>
+export type EnterGymEndpointMutationBody = BodyType<EnterGymRequest>
+export type EnterGymEndpointMutationError = ErrorType<unknown>
 
 /**
  * @summary Record a gym entry attempt
  */
-export const usePureGymWebAPIFeaturesGymAccessEnterGymEndpoint = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
+export const useEnterGymEndpoint = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessEnterGymEndpoint>>,
+      Awaited<ReturnType<typeof enterGymEndpoint>>,
       TError,
-      { data: BodyType<PureGymApplicationFeaturesGymAccessEnterGymRequest> },
+      { data: BodyType<EnterGymRequest> },
       TContext
     >
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessEnterGymEndpoint>>,
+  Awaited<ReturnType<typeof enterGymEndpoint>>,
   TError,
-  { data: BodyType<PureGymApplicationFeaturesGymAccessEnterGymRequest> },
+  { data: BodyType<EnterGymRequest> },
   TContext
 > => {
-  return useMutation(
-    getPureGymWebAPIFeaturesGymAccessEnterGymEndpointMutationOptions(options),
-    queryClient,
-  )
+  return useMutation(getEnterGymEndpointMutationOptions(options), queryClient)
 }
 
 /**
  * Returns a list of all gym access logs.
  * @summary List all gym access logs
  */
-export const pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint = (
+export const listGymAccessLogsEndpoint = (
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
-  return axiosInstance<PureGymApplicationFeaturesCommonListQueryOfGymAccessLog>(
+  return axiosInstance<ListQueryOfGymAccessLog>(
     { url: `/api/gym-access-logs`, method: 'GET', signal },
     options,
   )
 }
 
-export const getPureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpointQueryKey = () => {
+export const getListGymAccessLogsEndpointQueryKey = () => {
   return [`/api/gym-access-logs`] as const
 }
 
-export const getPureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpointQueryOptions = <
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
+export const getListGymAccessLogsEndpointQueryOptions = <
+  TData = Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>,
   TError = ErrorType<unknown>,
 >(options?: {
   query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
-      TError,
-      TData
-    >
+    UseQueryOptions<Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>, TError, TData>
   >
   request?: SecondParameter<typeof axiosInstance>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getPureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpointQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getListGymAccessLogsEndpointQueryKey()
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>
-  > = ({ signal }) =>
-    pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint(requestOptions, signal)
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>> = ({
+    signal,
+  }) => listGymAccessLogsEndpoint(requestOptions, signal)
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
+    Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type PureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpointQueryResult = NonNullable<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>
+export type ListGymAccessLogsEndpointQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>
 >
-export type PureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpointQueryError = ErrorType<unknown>
+export type ListGymAccessLogsEndpointQueryError = ErrorType<unknown>
 
-export function usePureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
+export function useListGymAccessLogsEndpoint<
+  TData = Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options: {
     query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
+          Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>,
           TError,
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>
+          Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>
         >,
         'initialData'
       >
@@ -763,23 +642,19 @@ export function usePureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint<
   },
   queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
+export function useListGymAccessLogsEndpoint<
+  TData = Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
+          Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>,
           TError,
-          Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>
+          Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>
         >,
         'initialData'
       >
@@ -787,17 +662,13 @@ export function usePureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint<
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
+export function useListGymAccessLogsEndpoint<
+  TData = Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>, TError, TData>
     >
     request?: SecondParameter<typeof axiosInstance>
   },
@@ -807,24 +678,19 @@ export function usePureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint<
  * @summary List all gym access logs
  */
 
-export function usePureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint<
-  TData = Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
+export function useListGymAccessLogsEndpoint<
+  TData = Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint>>,
-        TError,
-        TData
-      >
+      UseQueryOptions<Awaited<ReturnType<typeof listGymAccessLogsEndpoint>>, TError, TData>
     >
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions =
-    getPureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpointQueryOptions(options)
+  const queryOptions = getListGymAccessLogsEndpointQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -833,35 +699,35 @@ export function usePureGymWebAPIFeaturesGymAccessListGymAccessLogsEndpoint<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const pureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint = (
+export const requestEntryQREndpoint = (
   memberId: string,
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
-  return axiosInstance<PureGymApplicationFeaturesGymAccessRequestEntryQRResponse>(
+  return axiosInstance<RequestEntryQRResponse>(
     { url: `/api/gym/members/${memberId}/access-keys`, method: 'POST', signal },
     options,
   )
 }
 
-export const getPureGymWebAPIFeaturesGymAccessRequestEntryQREndpointMutationOptions = <
+export const getRequestEntryQREndpointMutationOptions = <
   TError = ErrorType<void>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint>>,
+    Awaited<ReturnType<typeof requestEntryQREndpoint>>,
     TError,
     { memberId: string },
     TContext
   >
   request?: SecondParameter<typeof axiosInstance>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint>>,
+  Awaited<ReturnType<typeof requestEntryQREndpoint>>,
   TError,
   { memberId: string },
   TContext
 > => {
-  const mutationKey = ['pureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint']
+  const mutationKey = ['requestEntryQREndpoint']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -869,30 +735,27 @@ export const getPureGymWebAPIFeaturesGymAccessRequestEntryQREndpointMutationOpti
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint>>,
+    Awaited<ReturnType<typeof requestEntryQREndpoint>>,
     { memberId: string }
   > = (props) => {
     const { memberId } = props ?? {}
 
-    return pureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint(memberId, requestOptions)
+    return requestEntryQREndpoint(memberId, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PureGymWebAPIFeaturesGymAccessRequestEntryQREndpointMutationResult = NonNullable<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint>>
+export type RequestEntryQREndpointMutationResult = NonNullable<
+  Awaited<ReturnType<typeof requestEntryQREndpoint>>
 >
 
-export type PureGymWebAPIFeaturesGymAccessRequestEntryQREndpointMutationError = ErrorType<void>
+export type RequestEntryQREndpointMutationError = ErrorType<void>
 
-export const usePureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(
+export const useRequestEntryQREndpoint = <TError = ErrorType<void>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint>>,
+      Awaited<ReturnType<typeof requestEntryQREndpoint>>,
       TError,
       { memberId: string },
       TContext
@@ -901,56 +764,53 @@ export const usePureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint = <
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesGymAccessRequestEntryQREndpoint>>,
+  Awaited<ReturnType<typeof requestEntryQREndpoint>>,
   TError,
   { memberId: string },
   TContext
 > => {
-  return useMutation(
-    getPureGymWebAPIFeaturesGymAccessRequestEntryQREndpointMutationOptions(options),
-    queryClient,
-  )
+  return useMutation(getRequestEntryQREndpointMutationOptions(options), queryClient)
 }
 
 /**
  * Authenticates a user with email and password and returns a JWT token.
  * @summary Authenticate a user
  */
-export const pureGymWebAPIFeaturesAuthenticationLoginEndpoint = (
-  pureGymApplicationFeaturesAuthenticationLoginCommand: BodyType<PureGymApplicationFeaturesAuthenticationLoginCommand>,
+export const loginEndpoint = (
+  loginCommand: BodyType<LoginCommand>,
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
-  return axiosInstance<PureGymApplicationFeaturesAuthenticationLoginResponse>(
+  return axiosInstance<LoginResponse>(
     {
       url: `/api/auth/login`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      data: pureGymApplicationFeaturesAuthenticationLoginCommand,
+      data: loginCommand,
       signal,
     },
     options,
   )
 }
 
-export const getPureGymWebAPIFeaturesAuthenticationLoginEndpointMutationOptions = <
+export const getLoginEndpointMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationLoginEndpoint>>,
+    Awaited<ReturnType<typeof loginEndpoint>>,
     TError,
-    { data: BodyType<PureGymApplicationFeaturesAuthenticationLoginCommand> },
+    { data: BodyType<LoginCommand> },
     TContext
   >
   request?: SecondParameter<typeof axiosInstance>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationLoginEndpoint>>,
+  Awaited<ReturnType<typeof loginEndpoint>>,
   TError,
-  { data: BodyType<PureGymApplicationFeaturesAuthenticationLoginCommand> },
+  { data: BodyType<LoginCommand> },
   TContext
 > => {
-  const mutationKey = ['pureGymWebAPIFeaturesAuthenticationLoginEndpoint']
+  const mutationKey = ['loginEndpoint']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -958,92 +818,83 @@ export const getPureGymWebAPIFeaturesAuthenticationLoginEndpointMutationOptions 
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationLoginEndpoint>>,
-    { data: BodyType<PureGymApplicationFeaturesAuthenticationLoginCommand> }
+    Awaited<ReturnType<typeof loginEndpoint>>,
+    { data: BodyType<LoginCommand> }
   > = (props) => {
     const { data } = props ?? {}
 
-    return pureGymWebAPIFeaturesAuthenticationLoginEndpoint(data, requestOptions)
+    return loginEndpoint(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PureGymWebAPIFeaturesAuthenticationLoginEndpointMutationResult = NonNullable<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationLoginEndpoint>>
->
-export type PureGymWebAPIFeaturesAuthenticationLoginEndpointMutationBody =
-  BodyType<PureGymApplicationFeaturesAuthenticationLoginCommand>
-export type PureGymWebAPIFeaturesAuthenticationLoginEndpointMutationError = ErrorType<unknown>
+export type LoginEndpointMutationResult = NonNullable<Awaited<ReturnType<typeof loginEndpoint>>>
+export type LoginEndpointMutationBody = BodyType<LoginCommand>
+export type LoginEndpointMutationError = ErrorType<unknown>
 
 /**
  * @summary Authenticate a user
  */
-export const usePureGymWebAPIFeaturesAuthenticationLoginEndpoint = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
+export const useLoginEndpoint = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationLoginEndpoint>>,
+      Awaited<ReturnType<typeof loginEndpoint>>,
       TError,
-      { data: BodyType<PureGymApplicationFeaturesAuthenticationLoginCommand> },
+      { data: BodyType<LoginCommand> },
       TContext
     >
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationLoginEndpoint>>,
+  Awaited<ReturnType<typeof loginEndpoint>>,
   TError,
-  { data: BodyType<PureGymApplicationFeaturesAuthenticationLoginCommand> },
+  { data: BodyType<LoginCommand> },
   TContext
 > => {
-  return useMutation(
-    getPureGymWebAPIFeaturesAuthenticationLoginEndpointMutationOptions(options),
-    queryClient,
-  )
+  return useMutation(getLoginEndpointMutationOptions(options), queryClient)
 }
 
 /**
  * Creates a new user account and member profile, then returns a JWT token.
  * @summary Register a new user
  */
-export const pureGymWebAPIFeaturesAuthenticationRegisterEndpoint = (
-  pureGymApplicationFeaturesAuthenticationRegisterCommand: BodyType<PureGymApplicationFeaturesAuthenticationRegisterCommand>,
+export const registerEndpoint = (
+  registerCommand: BodyType<RegisterCommand>,
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
-  return axiosInstance<PureGymApplicationFeaturesAuthenticationRegisterResponse>(
+  return axiosInstance<RegisterResponse>(
     {
       url: `/api/auth/register`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      data: pureGymApplicationFeaturesAuthenticationRegisterCommand,
+      data: registerCommand,
       signal,
     },
     options,
   )
 }
 
-export const getPureGymWebAPIFeaturesAuthenticationRegisterEndpointMutationOptions = <
+export const getRegisterEndpointMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationRegisterEndpoint>>,
+    Awaited<ReturnType<typeof registerEndpoint>>,
     TError,
-    { data: BodyType<PureGymApplicationFeaturesAuthenticationRegisterCommand> },
+    { data: BodyType<RegisterCommand> },
     TContext
   >
   request?: SecondParameter<typeof axiosInstance>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationRegisterEndpoint>>,
+  Awaited<ReturnType<typeof registerEndpoint>>,
   TError,
-  { data: BodyType<PureGymApplicationFeaturesAuthenticationRegisterCommand> },
+  { data: BodyType<RegisterCommand> },
   TContext
 > => {
-  const mutationKey = ['pureGymWebAPIFeaturesAuthenticationRegisterEndpoint']
+  const mutationKey = ['registerEndpoint']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -1051,49 +902,42 @@ export const getPureGymWebAPIFeaturesAuthenticationRegisterEndpointMutationOptio
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationRegisterEndpoint>>,
-    { data: BodyType<PureGymApplicationFeaturesAuthenticationRegisterCommand> }
+    Awaited<ReturnType<typeof registerEndpoint>>,
+    { data: BodyType<RegisterCommand> }
   > = (props) => {
     const { data } = props ?? {}
 
-    return pureGymWebAPIFeaturesAuthenticationRegisterEndpoint(data, requestOptions)
+    return registerEndpoint(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PureGymWebAPIFeaturesAuthenticationRegisterEndpointMutationResult = NonNullable<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationRegisterEndpoint>>
+export type RegisterEndpointMutationResult = NonNullable<
+  Awaited<ReturnType<typeof registerEndpoint>>
 >
-export type PureGymWebAPIFeaturesAuthenticationRegisterEndpointMutationBody =
-  BodyType<PureGymApplicationFeaturesAuthenticationRegisterCommand>
-export type PureGymWebAPIFeaturesAuthenticationRegisterEndpointMutationError = ErrorType<unknown>
+export type RegisterEndpointMutationBody = BodyType<RegisterCommand>
+export type RegisterEndpointMutationError = ErrorType<unknown>
 
 /**
  * @summary Register a new user
  */
-export const usePureGymWebAPIFeaturesAuthenticationRegisterEndpoint = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
+export const useRegisterEndpoint = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationRegisterEndpoint>>,
+      Awaited<ReturnType<typeof registerEndpoint>>,
       TError,
-      { data: BodyType<PureGymApplicationFeaturesAuthenticationRegisterCommand> },
+      { data: BodyType<RegisterCommand> },
       TContext
     >
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof pureGymWebAPIFeaturesAuthenticationRegisterEndpoint>>,
+  Awaited<ReturnType<typeof registerEndpoint>>,
   TError,
-  { data: BodyType<PureGymApplicationFeaturesAuthenticationRegisterCommand> },
+  { data: BodyType<RegisterCommand> },
   TContext
 > => {
-  return useMutation(
-    getPureGymWebAPIFeaturesAuthenticationRegisterEndpointMutationOptions(options),
-    queryClient,
-  )
+  return useMutation(getRegisterEndpointMutationOptions(options), queryClient)
 }

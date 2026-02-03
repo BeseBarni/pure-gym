@@ -5,14 +5,14 @@
  * API for 0-24 gym system
  * OpenAPI spec version: v1
  */
-import type { PureGymDomainEnumsMembershipStatus } from './pureGymDomainEnumsMembershipStatus'
+import type { MembershipStatus } from './membershipStatus'
 
-export interface PureGymApplicationFeaturesMembershipAddMembershipResponse {
+export interface AddMembershipResponse {
   membershipId?: string
   memberId?: string
   membershipTypeId?: string
   membershipTypeName?: string
   startDateUtc?: string
   endDateUtc?: string
-  status?: PureGymDomainEnumsMembershipStatus
+  status?: MembershipStatus
 }

@@ -6,7 +6,7 @@
  * OpenAPI spec version: v1
  */
 
-export interface PureGymApplicationFeaturesGymAccessRequestEntryQRResponse {
+export interface RequestEntryQRResponse {
   memberId?: string
   /** @nullable */
   entryCode?: string | null

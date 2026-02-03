@@ -6,7 +6,7 @@
  * OpenAPI spec version: v1
  */
 
-export interface PureGymApplicationModelsError {
+export interface Error {
   code?: string
   description?: string
 }
