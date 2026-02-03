@@ -9,7 +9,6 @@ namespace PureGym.Application.Features.GymAccess;
 
 public static class RequestEntryQR
 {
-    public sealed record Request(Guid MemberId);
     public sealed record Command(Guid MemberId) : IRequest<Response>, IMemberRequest;
     public sealed record Response(Guid MemberId, string? EntryCode, DateTime? Expiry);
 
