@@ -3,17 +3,16 @@
   <ItemGroup>
     <ProjectReference Include="..\PureGym.Domain\PureGym.Domain.csproj" />
     <ProjectReference Include="..\PureGym.SharedKernel\PureGym.SharedKernel.csproj" />
-    <ProjectReference Include="..\PureGym.SourceGenerators\PureGym.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit.Abstractions" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
-    <PackageReference Include="MediatR" Version="14.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.2" />
+    <PackageReference Include="MassTransit.Abstractions" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" />
   </ItemGroup>
 
   <PropertyGroup>

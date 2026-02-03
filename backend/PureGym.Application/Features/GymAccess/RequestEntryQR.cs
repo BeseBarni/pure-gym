@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Options;
 using PureGym.Application.Interfaces.Requests;
 using PureGym.Application.Interfaces.Services;
-using PureGym.Application.Settings;
 using PureGym.SharedKernel.Constants;
+using PureGym.SharedKernel.Settings;
 
 namespace PureGym.Application.Features.GymAccess;
 
@@ -29,10 +28,10 @@ public static class RequestEntryQR
         private readonly ICacheService _cacheService;
         private readonly GymEntrySettings _settings;
 
-        public Handler(ICacheService cacheService, IOptions<GymEntrySettings> options)
+        public Handler(ICacheService cacheService, GymEntrySettings settings)
         {
             _cacheService = cacheService;
-            _settings = options.Value;
+            _settings = settings;
         }
 
         public async Task<Response> Handle(Command request, CancellationToken cancellationToken)

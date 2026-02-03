@@ -7,14 +7,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PureGym.Application.Interfaces;
 using PureGym.Application.Interfaces.Services;
-using PureGym.Infrastructure;
+using PureGym.Infrastructure.Extensions;
 using PureGym.Infrastructure.Persistence;
 using PureGym.Infrastructure.Services;
-using PureGym.Infrastructure.Settings;
+using PureGym.SharedKernel.Settings;
 using System.Text;
 
 
-namespace FitNetClean.Infrastructure;
+namespace PureGym.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -22,10 +22,9 @@ public static class DependencyInjection
     {
         services.AddGeneratedSettings(configuration);
 
-        var dbConnection = configuration.GetSection(DatabaseSettings.SectionName)?.Get<DatabaseSettings>()?.ConnectionString ?? throw new InvalidOperationException($"{DatabaseSettings.SectionName} configuration value cannot be null");
+        var dbConnection = configuration.GetConfiguration<DatabaseSettings>().ConnectionString;
 
-        var rabbitMqSettings = configuration.GetSection(RabbitMQSettings.SectionName).Get<RabbitMQSettings>()
-            ?? throw new InvalidOperationException("RabbitMQ settings are not configured");
+        var rabbitMqSettings = configuration.GetConfiguration<RabbitMQSettings>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(dbConnection));
@@ -70,14 +69,11 @@ public static class DependencyInjection
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
-        var jwtSettings = configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()
-            ?? throw new InvalidOperationException("JWT settings are not configured");
+        var jwtSettings = configuration.GetConfiguration<JwtSettings>();
 
-        var googleSettings = configuration.GetSection(GoogleSettings.SectionName).Get<GoogleSettings>()
-        ?? throw new InvalidOperationException("Google settings are not configured");
+        var googleSettings = configuration.GetConfiguration<GoogleSettings>();
 
-        var facebookSettings = configuration.GetSection(FacebookSettings.SectionName).Get<FacebookSettings>()
-        ?? throw new InvalidOperationException("Facebook settings are not configured");
+        var facebookSettings = configuration.GetConfiguration<FacebookSettings>();
 
         services.AddAuthentication(options =>
         {

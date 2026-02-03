@@ -32,4 +32,13 @@ export default defineConfig(({ mode }) => ({
     format: 'es',
     sourcemap: true,
   },
+  server:{
+    proxy:{
+      '/api':{
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  }
 }))

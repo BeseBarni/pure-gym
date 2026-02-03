@@ -1,29 +1,19 @@
 using FastEndpoints;
-using FastEndpoints.Swagger;
-using FitNetClean.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using PureGym.Application;
+using PureGym.Infrastructure;
 using PureGym.WebAPI.Extensions;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddApplication(builder.Configuration);
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddHealthChecks();
 
 builder.Services.AddFastEndpoints();
-builder.Services.SwaggerDocument(o =>
-{
-    o.DocumentSettings = s =>
-    {
-        s.Title = "PureGym API";
-        s.Version = "v1";
-        s.Description = "API for PureGym management system";
-    };
-});
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddGalleraiSwagger();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -35,16 +25,13 @@ await app.UseDatabaseSeed();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.MapHealthChecks("/health");
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
-app.UseFastEndpoints(c =>
-{
-    c.Endpoints.RoutePrefix = "api";
-});
-app.UseSwaggerGen();
+app.UseGalleraiFastEndpoints();
 
 app.Run();

@@ -2,6 +2,13 @@
   <Folder Name="/MockClients/">
     <Project Path="PureGym.Mock.RevolvingDoor/PureGym.Mock.RevolvingDoor.csproj" Id="43c1b937-e2ad-477f-ad94-6b8fcd3bc431" />
   </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/Tools/">
+    <Project Path="PureGym.Tools.SchemaExtractor/PureGym.Tools.SchemaExtractor.csproj" Id="91b183b2-b461-472d-9039-e55ff9955bd8" />
+  </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>

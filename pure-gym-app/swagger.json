@@ -1,0 +1,796 @@
+{
+  "x-generator": "NSwag v14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PureGym API",
+    "description": "API for 0-24 gym system",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/members": {
+      "get": {
+        "tags": [
+          "Members"
+        ],
+        "summary": "List all members",
+        "description": "Returns a list of all active (non-deleted) members.",
+        "operationId": "ListMembersEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListQueryOfMember"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/membership": {
+      "post": {
+        "tags": [
+          "Membership"
+        ],
+        "summary": "Add a membership to a member",
+        "description": "Creates a new membership for a member based on the specified membership type.",
+        "operationId": "AddMembershipEndpoint",
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddMembership_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/memberships": {
+      "get": {
+        "tags": [
+          "Memberships"
+        ],
+        "summary": "List all memberships",
+        "description": "Returns a list of all active (non-deleted) memberships.",
+        "operationId": "ListMembershipsEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListQueryOfMembership"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/membership-types": {
+      "get": {
+        "tags": [
+          "Membership-Types"
+        ],
+        "summary": "List all membership types",
+        "description": "Returns a list of all active (non-deleted) membership types.",
+        "operationId": "ListMembershipTypesEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListQueryOfMembershipType"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/gym/enter": {
+      "post": {
+        "tags": [
+          "Gym"
+        ],
+        "summary": "Record a gym entry attempt",
+        "description": "Records an attempt by a member to enter the gym and returns whether access was granted.",
+        "operationId": "EnterGymEndpoint",
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnterGym_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfResponse2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/gym-access-logs": {
+      "get": {
+        "tags": [
+          "Gym-Access-Logs"
+        ],
+        "summary": "List all gym access logs",
+        "description": "Returns a list of all gym access logs.",
+        "operationId": "ListGymAccessLogsEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListQueryOfGymAccessLog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/gym/members/{memberId}/access-keys": {
+      "post": {
+        "tags": [
+          "Gym"
+        ],
+        "operationId": "RequestEntryQREndpoint",
+        "parameters": [
+          {
+            "name": "memberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestEntryQR_Response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Authenticate a user",
+        "description": "Authenticates a user with email and password and returns a JWT token.",
+        "operationId": "LoginEndpoint",
+        "requestBody": {
+          "x-name": "Command",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login_Command"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Login_Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register a new user",
+        "description": "Creates a new user account and member profile, then returns a JWT token.",
+        "operationId": "RegisterEndpoint",
+        "requestBody": {
+          "x-name": "Command",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Register_Command"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Register_Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ListQueryOfMember": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Member"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Member": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "deletedAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "memberships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Membership"
+            }
+          },
+          "accessLogs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GymAccessLog"
+            }
+          },
+          "fullName": {
+            "type": "string"
+          }
+        }
+      },
+      "Membership": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "deletedAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "memberId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "membershipTypeId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "startDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MembershipStatus"
+          },
+          "createdAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "member": {
+            "$ref": "#/components/schemas/Member"
+          },
+          "membershipType": {
+            "$ref": "#/components/schemas/MembershipType"
+          },
+          "accessLogs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GymAccessLog"
+            }
+          },
+          "daysRemaining": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "MembershipStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Active",
+          "Expired",
+          "Cancelled",
+          "Suspended"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "MembershipType": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "deletedAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "pricePerMonth": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "durationInDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "memberships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Membership"
+            }
+          }
+        }
+      },
+      "GymAccessLog": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "memberId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "membershipId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "accessedAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "result": {
+            "$ref": "#/components/schemas/AccessResult"
+          },
+          "member": {
+            "$ref": "#/components/schemas/Member"
+          },
+          "membership": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Membership"
+              }
+            ]
+          }
+        }
+      },
+      "AccessResult": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Granted",
+          "DeniedExpired",
+          "DeniedSuspended",
+          "DeniedNoMembership"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ResultOfResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AddMembership_Response"
+              }
+            ]
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AddMembership_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "membershipId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "memberId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "membershipTypeId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "membershipTypeName": {
+            "type": "string"
+          },
+          "startDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MembershipStatus"
+          }
+        }
+      },
+      "AddMembership_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "memberId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "membershipTypeId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "ListQueryOfMembership": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Membership"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ListQueryOfMembershipType": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MembershipType"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultOfResponse2": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnterGym_Response"
+              }
+            ]
+          }
+        }
+      },
+      "EnterGym_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "memberId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "accessedAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "EnterGym_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "memberId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "accessKey": {
+            "type": "string"
+          }
+        }
+      },
+      "ListQueryOfGymAccessLog": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GymAccessLog"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RequestEntryQR_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "memberId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "entryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "expiry": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "Login_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "Login_Command": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Register_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "Register_Command": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "JWTBearerAuth": {
+        "type": "http",
+        "description": "Enter a JWT token to authorize the requests...",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
