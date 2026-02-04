@@ -1,8 +1,8 @@
 using FastEndpoints;
+using FastEndpoints.Swagger;
 using PureGym.Application;
 using PureGym.Infrastructure;
 using PureGym.WebAPI.Extensions;
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,12 +25,13 @@ await app.UseDatabaseSeed();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.UseSwaggerGen();
+    app.UseSwaggerUi();
 }
 
 app.MapHealthChecks("/health");
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseGalleraiFastEndpoints();
 

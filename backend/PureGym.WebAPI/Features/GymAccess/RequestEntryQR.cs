@@ -19,16 +19,20 @@ public sealed class RequestEntryQREndpoint : Endpoint<RequestEntryQRRequest, Req
 
     public override void Configure()
     {
-        Post("/gym/members/{MemberId}/access-keys");
-        Description(x => x.Accepts<RequestEntryQRRequest>("*/*"));
+        Get("/gym/members/{MemberId:guid}/access-key");
+        AllowAnonymous();
+        Summary(s =>
+        {
+            s.Description = "Generates a QR entry key for a specific member.";
+        });
     }
 
-    public override async Task HandleAsync(RequestEntryQRRequest req, CancellationToken ct)
+    public override async Task HandleAsync(RequestEntryQRRequest reg, CancellationToken ct)
     {
-        var command = new RequestEntryQR.Command(req.MemberId);
+        var command = new RequestEntryQR.Command(reg.MemberId);
 
         var result = await _mediator.Send(command, ct);
 
-        Response = result;
+        await Send.OkAsync(result.Value);
     }
 }
