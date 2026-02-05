@@ -60,7 +60,7 @@ public static class EnterGym
             var accessedAt = DateTime.UtcNow;
 
             await _publishEndpoint.Publish(
-                new GymAccessGrantedEvent(
+                new GymEnteredEvent(
                     request.MemberId,
                     accessedAt),
                 ct);

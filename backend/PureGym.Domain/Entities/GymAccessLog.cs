@@ -15,7 +15,21 @@ public class GymAccessLog
 
     private GymAccessLog() { }
 
-    public static GymAccessLog Record(Member member)
+    //public static GymAccessLog Record(Member member)
+    //{
+    //    var activeMembership = member.IsDeleted ? null : member.GetActiveMembership();
+    //    var result = DetermineAccessResult(member, activeMembership);
+
+    //    return new GymAccessLog
+    //    {
+    //        Id = Guid.NewGuid(),
+    //        MemberId = member.Id,
+    //        MembershipId = activeMembership?.Id,
+    //        AccessedAtUtc = DateTime.UtcNow,
+    //        Result = result
+    //    };
+    //}
+    public static GymAccessLog Record(Member member, DateTime accessedAtUtc)
     {
         var activeMembership = member.IsDeleted ? null : member.GetActiveMembership();
         var result = DetermineAccessResult(member, activeMembership);
@@ -25,7 +39,7 @@ public class GymAccessLog
             Id = Guid.NewGuid(),
             MemberId = member.Id,
             MembershipId = activeMembership?.Id,
-            AccessedAtUtc = DateTime.UtcNow,
+            AccessedAtUtc = accessedAtUtc,
             Result = result
         };
     }

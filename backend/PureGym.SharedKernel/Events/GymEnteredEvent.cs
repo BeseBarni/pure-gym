@@ -1,5 +1,8 @@
-﻿namespace PureGym.SharedKernel.Events;
+﻿using MediatR;
+
+namespace PureGym.SharedKernel.Events;
 
 public record GymEnteredEvent(
     Guid MemberId,
-    DateTime OccurredOnUtc);
+    DateTime OccurredOnUtc
+) : INotification;
