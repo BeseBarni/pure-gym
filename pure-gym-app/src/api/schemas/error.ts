@@ -8,5 +8,5 @@
 
 export interface Error {
   code?: string
-  description?: string
+  message?: string
 }
