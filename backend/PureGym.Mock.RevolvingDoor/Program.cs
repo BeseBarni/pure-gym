@@ -3,6 +3,9 @@ using PureGym.Mock.RevolvingDoor;
 using PureGym.SharedKernel.Events;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddSingleton<DoorState>();
 
 var rabbitMqSettings =
@@ -34,5 +37,10 @@ var app = builder.Build();
 
 app.MapHealthChecks("/health");
 app.MapControllers();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 app.Run();
 
