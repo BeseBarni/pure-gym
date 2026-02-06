@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using PureGym.Application.Features.GymAccess.Events;
 using PureGym.Application.Interfaces;
 using PureGym.Application.Interfaces.Services;
 using PureGym.Infrastructure.Extensions;
@@ -33,6 +34,8 @@ public static class DependencyInjection
 
         services.AddMassTransit(x =>
         {
+            x.AddConsumer<GymEnteredEventConsumer>();
+
             x.AddEntityFrameworkOutbox<ApplicationDbContext>(o =>
             {
                 o.QueryDelay = TimeSpan.FromSeconds(1);

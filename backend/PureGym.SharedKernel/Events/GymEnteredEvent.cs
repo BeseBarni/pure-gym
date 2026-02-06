@@ -1,5 +1,7 @@
-﻿namespace PureGym.SharedKernel.Events;
+﻿
+namespace PureGym.SharedKernel.Events;
 
 public record GymEnteredEvent(
     Guid MemberId,
-    DateTime OccurredOnUtc);
+    DateTime OccurredOnUtc
+);
