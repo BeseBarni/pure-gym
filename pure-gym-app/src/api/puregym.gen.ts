@@ -699,77 +699,131 @@ export function useListGymAccessLogsEndpoint<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
+/**
+ * Generates a QR entry key for a specific member.
+ */
 export const requestEntryQREndpoint = (
   memberId: string,
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
   return axiosInstance<RequestEntryQRResponse>(
-    { url: `/api/gym/members/${memberId}/access-keys`, method: 'POST', signal },
+    { url: `/api/gym/members/${memberId}/access-key`, method: 'GET', signal },
     options,
   )
 }
 
-export const getRequestEntryQREndpointMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof requestEntryQREndpoint>>,
-    TError,
-    { memberId: string },
-    TContext
-  >
-  request?: SecondParameter<typeof axiosInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof requestEntryQREndpoint>>,
-  TError,
-  { memberId: string },
-  TContext
-> => {
-  const mutationKey = ['requestEntryQREndpoint']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof requestEntryQREndpoint>>,
-    { memberId: string }
-  > = (props) => {
-    const { memberId } = props ?? {}
-
-    return requestEntryQREndpoint(memberId, requestOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
+export const getRequestEntryQREndpointQueryKey = (memberId: string) => {
+  return [`/api/gym/members/${memberId}/access-key`] as const
 }
 
-export type RequestEntryQREndpointMutationResult = NonNullable<
+export const getRequestEntryQREndpointQueryOptions = <
+  TData = Awaited<ReturnType<typeof requestEntryQREndpoint>>,
+  TError = ErrorType<unknown>,
+>(
+  memberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof requestEntryQREndpoint>>, TError, TData>
+    >
+    request?: SecondParameter<typeof axiosInstance>
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getRequestEntryQREndpointQueryKey(memberId)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof requestEntryQREndpoint>>> = ({ signal }) =>
+    requestEntryQREndpoint(memberId, requestOptions, signal)
+
+  return { queryKey, queryFn, enabled: !!memberId, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof requestEntryQREndpoint>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type RequestEntryQREndpointQueryResult = NonNullable<
   Awaited<ReturnType<typeof requestEntryQREndpoint>>
 >
+export type RequestEntryQREndpointQueryError = ErrorType<unknown>
 
-export type RequestEntryQREndpointMutationError = ErrorType<void>
-
-export const useRequestEntryQREndpoint = <TError = ErrorType<void>, TContext = unknown>(
+export function useRequestEntryQREndpoint<
+  TData = Awaited<ReturnType<typeof requestEntryQREndpoint>>,
+  TError = ErrorType<unknown>,
+>(
+  memberId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof requestEntryQREndpoint>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof requestEntryQREndpoint>>,
+          TError,
+          Awaited<ReturnType<typeof requestEntryQREndpoint>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof axiosInstance>
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useRequestEntryQREndpoint<
+  TData = Awaited<ReturnType<typeof requestEntryQREndpoint>>,
+  TError = ErrorType<unknown>,
+>(
+  memberId: string,
   options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof requestEntryQREndpoint>>,
-      TError,
-      { memberId: string },
-      TContext
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof requestEntryQREndpoint>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof requestEntryQREndpoint>>,
+          TError,
+          Awaited<ReturnType<typeof requestEntryQREndpoint>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof axiosInstance>
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useRequestEntryQREndpoint<
+  TData = Awaited<ReturnType<typeof requestEntryQREndpoint>>,
+  TError = ErrorType<unknown>,
+>(
+  memberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof requestEntryQREndpoint>>, TError, TData>
     >
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof requestEntryQREndpoint>>,
-  TError,
-  { memberId: string },
-  TContext
-> => {
-  return useMutation(getRequestEntryQREndpointMutationOptions(options), queryClient)
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useRequestEntryQREndpoint<
+  TData = Awaited<ReturnType<typeof requestEntryQREndpoint>>,
+  TError = ErrorType<unknown>,
+>(
+  memberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof requestEntryQREndpoint>>, TError, TData>
+    >
+    request?: SecondParameter<typeof axiosInstance>
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getRequestEntryQREndpointQueryOptions(memberId, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
 }
 
 /**

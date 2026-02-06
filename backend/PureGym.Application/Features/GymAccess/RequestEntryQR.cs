@@ -11,7 +11,7 @@ namespace PureGym.Application.Features.GymAccess;
 public static class RequestEntryQR
 {
     public sealed record Command(Guid MemberId) : IRequest<Result<Response>>, IMemberRequest;
-    public sealed record Response(Guid MemberId, string? EntryCode, DateTime? Expiry);
+    public sealed record Response(Guid MemberId, string? EntryCode, DateTime? Expiry, int TotalDurationSeconds);
 
     public sealed class CommandValidator : AbstractValidator<Command>
     {
@@ -50,7 +50,7 @@ public static class RequestEntryQR
                 cancellationToken: cancellationToken
             );
 
-            return new Response(request.MemberId, result.Data, result.ExpiresAt);
+            return new Response(request.MemberId, result.Data, result.ExpiresAt, _settings.EntryKeyCacheTime);
         }
     }
 }
