@@ -13,3 +13,7 @@ export function formatSeconds(timeMs: number | null | undefined) {
   const s = sec % 60
   return `${m}m ${s}s`
 }
+
+ export function hasId<T extends { id?: string | null }>(m: T): m is T & { id: string } {
+  return typeof m.id === "string" && m.id.length > 0
+}

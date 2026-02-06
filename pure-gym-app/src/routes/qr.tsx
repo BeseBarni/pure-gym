@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { MemberQrCard } from "@/app/components/MemberQrCard"
+import { MemberQrCard } from "@/components/MemberQrCard"
 
 export const Route = createFileRoute("/qr")({
   component: QrPage,

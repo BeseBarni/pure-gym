@@ -1,4 +1,4 @@
-import * as React from "react"
+import { useState } from "react"
 import { QRCodeCanvas } from "qrcode.react"
 
 import { useListMembersEndpoint, useRequestEntryQREndpoint } from "@/api/puregym.gen"
@@ -10,31 +10,22 @@ import { Field, FieldLabel } from "@/shadcn/field"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shadcn/select"
 
 import useQRExpiry from "@/hooks/use-qr-hooks"
-import { formatSeconds } from "@/utilities/general-helpers"
-
-const EMPTY_GUID = "00000000-0000-0000-0000-000000000000"
+import { formatSeconds, hasId } from "@/utilities/general-helpers"
+import type { EntryQR } from "@/utilities/types"
 
 export function MemberQrCard() {
   const membersQuery = useListMembersEndpoint({
     query: { staleTime: 30_000 },
   })
 
-  function hasId<T extends { id?: string | null }>(m: T): m is T & { id: string } {
-  return typeof m.id === "string" && m.id.length > 0
-}
+  const [selectedMemberId, setSelectedMemberId] = useState("")
 
+  const qrQuery = useRequestEntryQREndpoint(selectedMemberId, {
+    query: { enabled: false, retry: false },
+  })
 
   const members = membersQuery.data?.items ?? []
-const memberOptions = members.filter(hasId)
-
-  const [selectedMemberId, setSelectedMemberId] = React.useState("")
-
-  const qrQuery = useRequestEntryQREndpoint(selectedMemberId || EMPTY_GUID, {
-    query: {
-      enabled: false,
-      retry: false,
-    },
-  })
+  const memberOptions = members.filter(hasId)
 
   const handleGenerate = async () => {
     if (!selectedMemberId) return
@@ -47,9 +38,7 @@ const memberOptions = members.filter(hasId)
 
   const { remainingTime, isExpired, progress } = useQRExpiry(expiry, totalDurationSeconds)
 
-  const qrValue = payload
-    ? JSON.stringify({ memberId: payload.memberId, entryCode: payload.entryCode })
-    : ""
+  const qrValue = JSON.stringify((payload ?? {}) as EntryQR)
 
   return (
     <Card className="max-w-md">
@@ -69,18 +58,11 @@ const memberOptions = members.filter(hasId)
             </SelectTrigger>
 
             <SelectContent>
-              {memberOptions.map((m) => {
-                const name =
-                  (m.fullName ?? `${m.firstName ?? ""} ${m.lastName ?? ""}`.trim()) ||
-                  m.email ||
-                  m.id
-
-                return (
-                  <SelectItem key={m.id} value={m.id}>
-                    {name}
-                  </SelectItem>
-                )
-              })}
+              {memberOptions.map((m) => (
+                <SelectItem key={m.id} value={m.id}>
+                  {(m.fullName ?? `${m.firstName ?? ""} ${m.lastName ?? ""}`.trim()) || m.email || m.id}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
