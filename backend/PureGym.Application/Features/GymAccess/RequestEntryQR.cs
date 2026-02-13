@@ -3,15 +3,15 @@ using MediatR;
 using PureGym.Application.Interfaces.Requests;
 using PureGym.Application.Interfaces.Services;
 using PureGym.SharedKernel.Constants;
+using PureGym.SharedKernel.Models;
 using PureGym.SharedKernel.Settings;
 
 namespace PureGym.Application.Features.GymAccess;
 
 public static class RequestEntryQR
 {
-    public sealed record Request(Guid MemberId);
-    public sealed record Command(Guid MemberId) : IRequest<Response>, IMemberRequest;
-    public sealed record Response(Guid MemberId, string? EntryCode, DateTime? Expiry);
+    public sealed record Command(Guid MemberId) : IRequest<Result<Response>>, IMemberRequest;
+    public sealed record Response(Guid MemberId, string? EntryCode, DateTime? Expiry, int TotalDurationSeconds);
 
     public sealed class CommandValidator : AbstractValidator<Command>
     {
@@ -23,7 +23,7 @@ public static class RequestEntryQR
         }
     }
 
-    public sealed class Handler : IRequestHandler<Command, Response>
+    public sealed class Handler : IRequestHandler<Command, Result<Response>>
     {
         private readonly ICacheService _cacheService;
         private readonly GymEntrySettings _settings;
@@ -34,7 +34,7 @@ public static class RequestEntryQR
             _settings = settings;
         }
 
-        public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Response>> Handle(Command request, CancellationToken cancellationToken)
         {
             var key = CacheKeys.MemberAccess(request.MemberId);
             var ttl = TimeSpan.FromSeconds(_settings.EntryKeyCacheTime);
@@ -49,7 +49,8 @@ public static class RequestEntryQR
                 expiration: ttl,
                 cancellationToken: cancellationToken
             );
-            return new Response(request.MemberId, result.Data, result.ExpiresAt);
+
+            return new Response(request.MemberId, result.Data, result.ExpiresAt, _settings.EntryKeyCacheTime);
         }
     }
 }

@@ -165,11 +165,12 @@
         }
       }
     },
-    "/api/gym/members/{memberId}/access-keys": {
-      "post": {
+    "/api/gym/members/{memberId}/access-key": {
+      "get": {
         "tags": [
           "Gym"
         ],
+        "description": "Generates a QR entry key for a specific member.",
         "operationId": "RequestEntryQREndpoint",
         "parameters": [
           {
@@ -192,16 +193,8 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
           }
-        },
-        "security": [
-          {
-            "JWTBearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/api/auth/login": {
@@ -545,7 +538,7 @@
           "code": {
             "type": "string"
           },
-          "description": {
+          "message": {
             "type": "string"
           }
         }
@@ -710,6 +703,10 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "totalDurationSeconds": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

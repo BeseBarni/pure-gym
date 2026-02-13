@@ -13,12 +13,12 @@
 	  <PackageReference Include="FastEndpoints" />
 	  <PackageReference Include="FastEndpoints.Swagger" />
 	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
-	  <PackageReference Include="Scalar.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PureGym.Application\PureGym.Application.csproj" />
     <ProjectReference Include="..\PureGym.Infrastructure\PureGym.Infrastructure.csproj" />
+    <ProjectReference Include="..\PureGym.SharedKernel\PureGym.SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>

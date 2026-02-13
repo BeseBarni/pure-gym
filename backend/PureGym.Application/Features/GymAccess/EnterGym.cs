@@ -3,9 +3,9 @@ using MassTransit;
 using MediatR;
 using PureGym.Application.Interfaces;
 using PureGym.Application.Interfaces.Services;
-using PureGym.Application.Models;
 using PureGym.SharedKernel.Constants;
 using PureGym.SharedKernel.Events;
+using PureGym.SharedKernel.Models;
 
 namespace PureGym.Application.Features.GymAccess;
 

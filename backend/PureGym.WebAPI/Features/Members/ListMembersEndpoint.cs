@@ -1,7 +1,6 @@
 using FastEndpoints;
 using MediatR;
 using PureGym.Application.Features.Common;
-using PureGym.Application.Models;
 using PureGym.Domain.Entities;
 
 namespace PureGym.WebAPI.Features.Members;

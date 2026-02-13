@@ -12,4 +12,5 @@ export interface RequestEntryQRResponse {
   entryCode?: string | null
   /** @nullable */
   expiry?: string | null
+  totalDurationSeconds?: number
 }
