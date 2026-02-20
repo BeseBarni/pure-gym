@@ -1,3 +1,4 @@
+using PureGym.Domain.Enums;
 using PureGym.Domain.Exceptions;
 
 namespace PureGym.Domain.Entities;
@@ -15,6 +16,7 @@ public class Member : BaseSoftDeletableEntity
 
     public ICollection<Membership> Memberships { get; private set; } = [];
     public ICollection<GymAccessLog> AccessLogs { get; private set; } = [];
+    public ICollection<MemberOrder> Orders { get; private set; } = [];
 
     public string FullName => $"{FirstName} {LastName}";
 
@@ -98,5 +100,16 @@ public class Member : BaseSoftDeletableEntity
         {
             membership.Cancel();
         }
+    }
+
+    public bool HasActiveOrPendingMembership()
+    {
+        if (IsDeleted) return false;
+
+        return Memberships.Any(m =>
+            !m.IsDeleted &&
+            (m.Status == MembershipStatus.Active || m.Status == MembershipStatus.Pending) &&
+            !m.IsExpired()
+        );
     }
 }

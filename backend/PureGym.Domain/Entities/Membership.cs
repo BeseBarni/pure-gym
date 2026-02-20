@@ -11,6 +11,7 @@ public class Membership : BaseSoftDeletableEntity
     public DateTime StartDateUtc { get; private set; }
     public DateTime EndDateUtc { get; private set; }
     public MembershipStatus Status { get; private set; }
+    public DateTime? PendingSinceUtc { get; private set; }
     public DateTime CreatedAtUtc { get; private set; }
 
     protected override string EntityName => nameof(Membership);
@@ -18,6 +19,8 @@ public class Membership : BaseSoftDeletableEntity
     public Member Member { get; private set; } = null!;
     public MembershipType MembershipType { get; private set; } = null!;
     public ICollection<GymAccessLog> AccessLogs { get; private set; } = [];
+    public ICollection<MemberOrder> Orders { get; private set; } = [];
+
 
     public int DaysRemaining => IsValid() ? (EndDateUtc - DateTime.UtcNow).Days : 0;
 
@@ -48,7 +51,32 @@ public class Membership : BaseSoftDeletableEntity
         member.AddMembership(membership);
         return membership;
     }
+    public static Membership CreatePending(Member member, MembershipType type) 
+    {
+        if (member.IsDeleted)
+            throw DomainException.EntityDeleted(nameof(Member), member.Id);
+        if (type.IsDeleted)
+            throw DomainException.EntityDeleted(nameof(MembershipType), type.Id);
+        if (!type.IsActive)
+            throw DomainException.MembershipTypeInactive(type.Id);
 
+        var now = DateTime.UtcNow;
+        var membership = new Membership
+        {
+            MemberId = member.Id,
+            MembershipTypeId = type.Id,
+            StartDateUtc = now,
+            EndDateUtc = now.AddDays(type.DurationInDays),
+            Status = MembershipStatus.Pending,
+            PendingSinceUtc = now,
+            CreatedAtUtc = now
+        };
+
+        member.AddMembership(membership);
+        return membership;
+    }
+
+    public bool IsPending() => Status == MembershipStatus.Pending;
     public bool IsValid() =>
         !IsDeleted &&
         Status == MembershipStatus.Active &&
@@ -56,6 +84,20 @@ public class Membership : BaseSoftDeletableEntity
         DateTime.UtcNow <= EndDateUtc;
 
     public bool IsExpired() => DateTime.UtcNow > EndDateUtc;
+
+    public void Activate()
+    {
+        ThrowIfDeleted();
+
+        if (IsExpired())
+            throw DomainException.MembershipExpired(Id);
+
+        if (Status != MembershipStatus.Pending)
+            throw DomainException.InvalidState(nameof(Membership), Status.ToString(), "activate");
+
+        Status = MembershipStatus.Active;
+        PendingSinceUtc = null;
+    }
 
     public void Cancel()
     {
