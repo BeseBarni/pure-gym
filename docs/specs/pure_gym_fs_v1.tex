@@ -200,7 +200,7 @@ The membership status transitions through the following states:
     \item \textbf{Client:} Request QR Code.
     \item \textbf{API:} Validate Member and Membership $\rightarrow$ Generate OTP $\rightarrow$ Store in RAM $\rightarrow$ Return QR.
     \item \textbf{Hardware:} Scan QR $\rightarrow$ Send to API.
-    \item \textbf{API:} Validate OTP (RAM) $\rightarrow$ Send out GymEntryRequestEvent $\rightarrow$ Return OK $\rightarrow$ \textbf{Hardware Opens Door}.
+    \item \textbf{API:} Validate OTP (RAM) $\rightarrow$ Send out \texttt{GymEntered} event $\rightarrow$ Return OK $\rightarrow$ \textbf{Hardware Opens Door}.
     \item \textbf{API (Async):} Publish Event $\rightarrow$ Worker consumes $\rightarrow$ Write DB Log / Decrement Ticket.
 \end{enumerate}
 
