@@ -147,7 +147,7 @@ Performance is prioritized over immediate database persistence to ensure rapid e
         \item OTP is stored in \textbf{In-Memory Cache} for low latency.
     \end{itemize}
     
-    \item[ACS-02] \textbf{Entry Validation.} When the QR is scanned at the `EnterGym` endpoint:
+    \item[ACS-02] \textbf{Entry Validation.} When the QR is scanned at the \texttt{EnterGym} endpoint:
     \begin{itemize}
         \item System validates OTP against in-memory state.
         \item \textbf{Rules:} Member must have active subscription OR $>0$ tickets. Member must not be banned.
