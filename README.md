@@ -6,24 +6,29 @@ This project follows **Clean Architecture** and its constraints, utilizing **CQR
 
 ---
 
+<div align="center">
+
+![.NET 10](https://img.shields.io/badge/.NET_10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![LGTM Stack](https://img.shields.io/badge/LGTM_Stack-F46800?style=for-the-badge&logo=grafana&logoColor=white)
+
+<br/>
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+![Architecture](https://img.shields.io/badge/Architecture-Clean_&_CQRS-success?style=for-the-badge)
+
+</div>
+
+---
+
 ## 🏛️ System Architecture
 
 Below is the C4 Level 2 (Container) diagram illustrating the high-level architecture, component interactions, and data flow of the PureGym Management System.
 
 ![PureGym C4 Level 2 Architecture Diagram](./docs/diagrams/PureGym-C4-LVL2-v1.png)
-
----
-
-## 💻 Tech Stack
-
-| Component | Technology | Description |
-| :--- | :--- | :--- |
-| **Backend** | .NET 10 | Core API and business logic |
-| **Frontend** | React | User interface and client-side application |
-| **Database** | PostgreSQL | Primary relational data store |
-| **Messaging** | RabbitMQ | Message broker for asynchronous event handling |
-| **Infrastructure** | Docker | Containerization for deployment and local development |
-| **Observability**| LGTM Stack | Loki, Grafana, Tempo, and Mimir for comprehensive telemetry |
 
 ---
 
