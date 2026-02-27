@@ -70,13 +70,13 @@ public static class OrderMembership
                 membershipTypeId: type.Id
             );
 
-            _db.MemberOrders.Add(order);
+            var addOrderTask = _db.MemberOrders.AddAsync(order, ct).AsTask();
 
-            await _db.SaveChangesAsync(ct);
-
-            await _publish.Publish(
+            var publishTask = _publish.Publish(
                 new MembershipOrderedEvent(member.Id, membership.Id, DateTime.UtcNow),
                 ct);
+            await Task.WhenAll([addOrderTask, publishTask]);
+            await _db.SaveChangesAsync(ct);
 
             return Result<Response>.Success(new Response(membership.Id));
         }

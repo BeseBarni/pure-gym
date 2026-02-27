@@ -12,7 +12,6 @@ public sealed class OrderMembershipEndpoint
     public override void Configure()
     {
         Post("/membership/order");
-        AllowAnonymous();
         Summary(s =>
         {
             s.Summary = "Order membership";

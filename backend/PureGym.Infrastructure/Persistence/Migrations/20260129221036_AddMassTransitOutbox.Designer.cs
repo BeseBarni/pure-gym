@@ -9,730 +9,729 @@ using PureGym.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace PureGym.Infrastructure.Persistence.Migrations
+namespace PureGym.Infrastructure.Persistence.Migrations;
+
+[DbContext(typeof(ApplicationDbContext))]
+[Migration("20260129221036_AddMassTransitOutbox")]
+partial class AddMassTransitOutbox
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260129221036_AddMassTransitOutbox")]
-    partial class AddMassTransitOutbox
+    /// <inheritdoc />
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
-        {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+        modelBuilder
+            .HasAnnotation("ProductVersion", "10.0.2")
+            .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+        NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+        modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime?>("Consumed")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime?>("Consumed")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("ConsumerId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("ConsumerId")
+                    .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("Delivered")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime?>("Delivered")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("ExpirationTime")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime?>("ExpirationTime")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<long?>("LastSequenceNumber")
-                        .HasColumnType("bigint");
+                b.Property<long?>("LastSequenceNumber")
+                    .HasColumnType("bigint");
 
-                    b.Property<Guid>("LockId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("LockId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("MessageId")
+                    .HasColumnType("uuid");
 
-                    b.Property<int>("ReceiveCount")
-                        .HasColumnType("integer");
+                b.Property<int>("ReceiveCount")
+                    .HasColumnType("integer");
 
-                    b.Property<DateTime>("Received")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime>("Received")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea");
+                b.Property<byte[]>("RowVersion")
+                    .IsConcurrencyToken()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("bytea");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("Delivered");
+                b.HasIndex("Delivered");
 
-                    b.ToTable("InboxState");
-                });
+                b.ToTable("InboxState");
+            });
 
-            modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>
-                {
-                    b.Property<long>("SequenceNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+        modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>
+            {
+                b.Property<long>("SequenceNumber")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("SequenceNumber"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("SequenceNumber"));
 
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("text");
+                b.Property<string>("Body")
+                    .IsRequired()
+                    .HasColumnType("text");
 
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("ContentType")
+                    .IsRequired()
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<Guid?>("ConversationId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("ConversationId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid?>("CorrelationId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("CorrelationId")
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("DestinationAddress")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("DestinationAddress")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<DateTime?>("EnqueueTime")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime?>("EnqueueTime")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("ExpirationTime")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime?>("ExpirationTime")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("FaultAddress")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("FaultAddress")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<string>("Headers")
-                        .HasColumnType("text");
+                b.Property<string>("Headers")
+                    .HasColumnType("text");
 
-                    b.Property<Guid?>("InboxConsumerId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("InboxConsumerId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid?>("InboxMessageId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("InboxMessageId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid?>("InitiatorId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("InitiatorId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("MessageId")
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("MessageType")
-                        .IsRequired()
-                        .HasColumnType("text");
+                b.Property<string>("MessageType")
+                    .IsRequired()
+                    .HasColumnType("text");
 
-                    b.Property<Guid?>("OutboxId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("OutboxId")
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("Properties")
-                        .HasColumnType("text");
+                b.Property<string>("Properties")
+                    .HasColumnType("text");
 
-                    b.Property<Guid?>("RequestId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("RequestId")
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("ResponseAddress")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("ResponseAddress")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<DateTime>("SentTime")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime>("SentTime")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("SourceAddress")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("SourceAddress")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.HasKey("SequenceNumber");
+                b.HasKey("SequenceNumber");
 
-                    b.HasIndex("EnqueueTime");
+                b.HasIndex("EnqueueTime");
 
-                    b.HasIndex("ExpirationTime");
+                b.HasIndex("ExpirationTime");
 
-                    b.HasIndex("OutboxId", "SequenceNumber")
-                        .IsUnique();
+                b.HasIndex("OutboxId", "SequenceNumber")
+                    .IsUnique();
 
-                    b.HasIndex("InboxMessageId", "InboxConsumerId", "SequenceNumber")
-                        .IsUnique();
+                b.HasIndex("InboxMessageId", "InboxConsumerId", "SequenceNumber")
+                    .IsUnique();
 
-                    b.ToTable("OutboxMessage");
-                });
+                b.ToTable("OutboxMessage");
+            });
 
-            modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxState", b =>
-                {
-                    b.Property<Guid>("OutboxId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+        modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxState", b =>
+            {
+                b.Property<Guid>("OutboxId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime>("Created")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("Delivered")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime?>("Delivered")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<long?>("LastSequenceNumber")
-                        .HasColumnType("bigint");
+                b.Property<long?>("LastSequenceNumber")
+                    .HasColumnType("bigint");
 
-                    b.Property<Guid>("LockId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("LockId")
+                    .HasColumnType("uuid");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea");
+                b.Property<byte[]>("RowVersion")
+                    .IsConcurrencyToken()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("bytea");
 
-                    b.HasKey("OutboxId");
+                b.HasKey("OutboxId");
 
-                    b.HasIndex("Created");
+                b.HasIndex("Created");
 
-                    b.ToTable("OutboxState");
-                });
+                b.ToTable("OutboxState");
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("text");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("Name")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("NormalizedName")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                b.HasIndex("NormalizedName")
+                    .IsUnique()
+                    .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
-                });
+                b.ToTable("AspNetRoles", (string)null);
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("text");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("text");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("RoleId")
+                    .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
+                b.ToTable("AspNetRoleClaims", (string)null);
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("text");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
+                b.ToTable("AspNetUserClaims", (string)null);
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+            {
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("text");
 
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                b.Property<string>("ProviderKey")
+                    .HasColumnType("text");
 
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
+                b.Property<string>("ProviderDisplayName")
+                    .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uuid");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
+                b.ToTable("AspNetUserLogins", (string)null);
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+            {
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("RoleId")
+                    .HasColumnType("uuid");
 
-                    b.HasKey("UserId", "RoleId");
+                b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
+                b.ToTable("AspNetUserRoles", (string)null);
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+            {
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("text");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
+                b.Property<string>("Name")
+                    .HasColumnType("text");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("text");
+                b.Property<string>("Value")
+                    .HasColumnType("text");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
+                b.ToTable("AspNetUserTokens", (string)null);
+            });
 
-            modelBuilder.Entity("PureGym.Domain.Entities.GymAccessLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+        modelBuilder.Entity("PureGym.Domain.Entities.GymAccessLog", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasColumnName("id");
 
-                    b.Property<DateTime>("AccessedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("accessed_at_utc");
+                b.Property<DateTime>("AccessedAtUtc")
+                    .HasColumnType("timestamp with time zone")
+                    .HasColumnName("accessed_at_utc");
 
-                    b.Property<Guid>("MemberId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("member_id");
+                b.Property<Guid>("MemberId")
+                    .HasColumnType("uuid")
+                    .HasColumnName("member_id");
 
-                    b.Property<Guid?>("MembershipId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("membership_id");
+                b.Property<Guid?>("MembershipId")
+                    .HasColumnType("uuid")
+                    .HasColumnName("membership_id");
 
-                    b.Property<int>("Result")
-                        .HasColumnType("integer")
-                        .HasColumnName("result");
+                b.Property<int>("Result")
+                    .HasColumnType("integer")
+                    .HasColumnName("result");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("AccessedAtUtc");
+                b.HasIndex("AccessedAtUtc");
 
-                    b.HasIndex("MemberId");
+                b.HasIndex("MemberId");
 
-                    b.HasIndex("MembershipId");
+                b.HasIndex("MembershipId");
 
-                    b.HasIndex("Result");
+                b.HasIndex("Result");
 
-                    b.HasIndex("MemberId", "AccessedAtUtc");
+                b.HasIndex("MemberId", "AccessedAtUtc");
 
-                    b.HasIndex("MembershipId", "AccessedAtUtc");
+                b.HasIndex("MembershipId", "AccessedAtUtc");
 
-                    b.ToTable("gym_access_logs", (string)null);
-                });
+                b.ToTable("gym_access_logs", (string)null);
+            });
 
-            modelBuilder.Entity("PureGym.Domain.Entities.Member", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+        modelBuilder.Entity("PureGym.Domain.Entities.Member", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasColumnName("id");
 
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at_utc");
+                b.Property<DateTime>("CreatedAtUtc")
+                    .HasColumnType("timestamp with time zone")
+                    .HasColumnName("created_at_utc");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("date")
-                        .HasColumnName("date_of_birth");
+                b.Property<DateTime>("DateOfBirth")
+                    .HasColumnType("date")
+                    .HasColumnName("date_of_birth");
 
-                    b.Property<DateTime?>("DeletedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at_utc");
+                b.Property<DateTime?>("DeletedAtUtc")
+                    .HasColumnType("timestamp with time zone")
+                    .HasColumnName("deleted_at_utc");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("email");
+                b.Property<string>("Email")
+                    .IsRequired()
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)")
+                    .HasColumnName("email");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("first_name");
+                b.Property<string>("FirstName")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)")
+                    .HasColumnName("first_name");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_deleted");
+                b.Property<bool>("IsDeleted")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("boolean")
+                    .HasDefaultValue(false)
+                    .HasColumnName("is_deleted");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("last_name");
+                b.Property<string>("LastName")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)")
+                    .HasColumnName("last_name");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("phone_number");
+                b.Property<string>("PhoneNumber")
+                    .HasMaxLength(20)
+                    .HasColumnType("character varying(20)")
+                    .HasColumnName("phone_number");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("is_deleted = false");
+                b.HasIndex("Email")
+                    .IsUnique()
+                    .HasFilter("is_deleted = false");
 
-                    b.HasIndex("IsDeleted");
+                b.HasIndex("IsDeleted");
 
-                    b.ToTable("members", (string)null);
-                });
+                b.ToTable("members", (string)null);
+            });
 
-            modelBuilder.Entity("PureGym.Domain.Entities.Membership", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+        modelBuilder.Entity("PureGym.Domain.Entities.Membership", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasColumnName("id");
 
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at_utc");
+                b.Property<DateTime>("CreatedAtUtc")
+                    .HasColumnType("timestamp with time zone")
+                    .HasColumnName("created_at_utc");
 
-                    b.Property<DateTime?>("DeletedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at_utc");
+                b.Property<DateTime?>("DeletedAtUtc")
+                    .HasColumnType("timestamp with time zone")
+                    .HasColumnName("deleted_at_utc");
 
-                    b.Property<DateTime>("EndDateUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("end_date_utc");
+                b.Property<DateTime>("EndDateUtc")
+                    .HasColumnType("timestamp with time zone")
+                    .HasColumnName("end_date_utc");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_deleted");
+                b.Property<bool>("IsDeleted")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("boolean")
+                    .HasDefaultValue(false)
+                    .HasColumnName("is_deleted");
 
-                    b.Property<Guid>("MemberId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("member_id");
+                b.Property<Guid>("MemberId")
+                    .HasColumnType("uuid")
+                    .HasColumnName("member_id");
 
-                    b.Property<Guid>("MembershipTypeId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("membership_type_id");
+                b.Property<Guid>("MembershipTypeId")
+                    .HasColumnType("uuid")
+                    .HasColumnName("membership_type_id");
 
-                    b.Property<DateTime>("StartDateUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("start_date_utc");
+                b.Property<DateTime>("StartDateUtc")
+                    .HasColumnType("timestamp with time zone")
+                    .HasColumnName("start_date_utc");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
-                        .HasColumnName("status");
+                b.Property<int>("Status")
+                    .HasColumnType("integer")
+                    .HasColumnName("status");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("EndDateUtc");
+                b.HasIndex("EndDateUtc");
 
-                    b.HasIndex("IsDeleted");
+                b.HasIndex("IsDeleted");
 
-                    b.HasIndex("MemberId");
+                b.HasIndex("MemberId");
 
-                    b.HasIndex("MembershipTypeId");
+                b.HasIndex("MembershipTypeId");
 
-                    b.HasIndex("Status");
+                b.HasIndex("Status");
 
-                    b.ToTable("memberships", (string)null);
-                });
+                b.ToTable("memberships", (string)null);
+            });
 
-            modelBuilder.Entity("PureGym.Domain.Entities.MembershipType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+        modelBuilder.Entity("PureGym.Domain.Entities.MembershipType", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasColumnName("id");
 
-                    b.Property<DateTime?>("DeletedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at_utc");
+                b.Property<DateTime?>("DeletedAtUtc")
+                    .HasColumnType("timestamp with time zone")
+                    .HasColumnName("deleted_at_utc");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("description");
+                b.Property<string>("Description")
+                    .HasMaxLength(500)
+                    .HasColumnType("character varying(500)")
+                    .HasColumnName("description");
 
-                    b.Property<int>("DurationInDays")
-                        .HasColumnType("integer")
-                        .HasColumnName("duration_in_days");
+                b.Property<int>("DurationInDays")
+                    .HasColumnType("integer")
+                    .HasColumnName("duration_in_days");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true)
-                        .HasColumnName("is_active");
+                b.Property<bool>("IsActive")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("boolean")
+                    .HasDefaultValue(true)
+                    .HasColumnName("is_active");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_deleted");
+                b.Property<bool>("IsDeleted")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("boolean")
+                    .HasDefaultValue(false)
+                    .HasColumnName("is_deleted");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("name");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)")
+                    .HasColumnName("name");
 
-                    b.Property<decimal>("PricePerMonth")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
-                        .HasColumnName("price_per_month");
+                b.Property<decimal>("PricePerMonth")
+                    .HasPrecision(10, 2)
+                    .HasColumnType("numeric(10,2)")
+                    .HasColumnName("price_per_month");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("IsActive");
+                b.HasIndex("IsActive");
 
-                    b.HasIndex("IsDeleted");
+                b.HasIndex("IsDeleted");
 
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("is_deleted = false");
+                b.HasIndex("Name")
+                    .IsUnique()
+                    .HasFilter("is_deleted = false");
 
-                    b.ToTable("membership_types", (string)null);
-                });
+                b.ToTable("membership_types", (string)null);
+            });
 
-            modelBuilder.Entity("PureGym.Infrastructure.Persistence.ApplicationUser", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+        modelBuilder.Entity("PureGym.Infrastructure.Persistence.ApplicationUser", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                b.Property<int>("AccessFailedCount")
+                    .HasColumnType("integer");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime>("CreatedAtUtc")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("Email")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                b.Property<bool>("EmailConfirmed")
+                    .HasColumnType("boolean");
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                b.Property<string>("FirstName")
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)");
 
-                    b.Property<DateTime?>("LastLoginUtc")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime?>("LastLoginUtc")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("LastName")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                b.Property<string>("LastName")
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                b.Property<bool>("LockoutEnabled")
+                    .HasColumnType("boolean");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTimeOffset?>("LockoutEnd")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("NormalizedEmail")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("NormalizedUserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                b.Property<string>("PasswordHash")
+                    .HasColumnType("text");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
+                b.Property<string>("PhoneNumber")
+                    .HasColumnType("text");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                b.Property<bool>("PhoneNumberConfirmed")
+                    .HasColumnType("boolean");
 
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
+                b.Property<string>("SecurityStamp")
+                    .HasColumnType("text");
 
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                b.Property<bool>("TwoFactorEnabled")
+                    .HasColumnType("boolean");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("UserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
+                b.HasIndex("Email")
+                    .IsUnique();
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                b.HasIndex("NormalizedEmail")
+                    .HasDatabaseName("EmailIndex");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                b.HasIndex("NormalizedUserName")
+                    .IsUnique()
+                    .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
-                });
+                b.ToTable("AspNetUsers", (string)null);
+            });
 
-            modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>
-                {
-                    b.HasOne("MassTransit.EntityFrameworkCoreIntegration.OutboxState", null)
-                        .WithMany()
-                        .HasForeignKey("OutboxId");
+        modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>
+            {
+                b.HasOne("MassTransit.EntityFrameworkCoreIntegration.OutboxState", null)
+                    .WithMany()
+                    .HasForeignKey("OutboxId");
 
-                    b.HasOne("MassTransit.EntityFrameworkCoreIntegration.InboxState", null)
-                        .WithMany()
-                        .HasForeignKey("InboxMessageId", "InboxConsumerId")
-                        .HasPrincipalKey("MessageId", "ConsumerId");
-                });
+                b.HasOne("MassTransit.EntityFrameworkCoreIntegration.InboxState", null)
+                    .WithMany()
+                    .HasForeignKey("InboxMessageId", "InboxConsumerId")
+                    .HasPrincipalKey("MessageId", "ConsumerId");
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
-                {
-                    b.HasOne("PureGym.Infrastructure.Persistence.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+            {
+                b.HasOne("PureGym.Infrastructure.Persistence.ApplicationUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.HasOne("PureGym.Infrastructure.Persistence.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+            {
+                b.HasOne("PureGym.Infrastructure.Persistence.ApplicationUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("PureGym.Infrastructure.Persistence.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                b.HasOne("PureGym.Infrastructure.Persistence.ApplicationUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.HasOne("PureGym.Infrastructure.Persistence.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+            {
+                b.HasOne("PureGym.Infrastructure.Persistence.ApplicationUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
-            modelBuilder.Entity("PureGym.Domain.Entities.GymAccessLog", b =>
-                {
-                    b.HasOne("PureGym.Domain.Entities.Member", "Member")
-                        .WithMany("AccessLogs")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+        modelBuilder.Entity("PureGym.Domain.Entities.GymAccessLog", b =>
+            {
+                b.HasOne("PureGym.Domain.Entities.Member", "Member")
+                    .WithMany("AccessLogs")
+                    .HasForeignKey("MemberId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("PureGym.Domain.Entities.Membership", "Membership")
-                        .WithMany("AccessLogs")
-                        .HasForeignKey("MembershipId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                b.HasOne("PureGym.Domain.Entities.Membership", "Membership")
+                    .WithMany("AccessLogs")
+                    .HasForeignKey("MembershipId")
+                    .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Member");
+                b.Navigation("Member");
 
-                    b.Navigation("Membership");
-                });
+                b.Navigation("Membership");
+            });
 
-            modelBuilder.Entity("PureGym.Domain.Entities.Membership", b =>
-                {
-                    b.HasOne("PureGym.Domain.Entities.Member", "Member")
-                        .WithMany("Memberships")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+        modelBuilder.Entity("PureGym.Domain.Entities.Membership", b =>
+            {
+                b.HasOne("PureGym.Domain.Entities.Member", "Member")
+                    .WithMany("Memberships")
+                    .HasForeignKey("MemberId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("PureGym.Domain.Entities.MembershipType", "MembershipType")
-                        .WithMany("Memberships")
-                        .HasForeignKey("MembershipTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("PureGym.Domain.Entities.MembershipType", "MembershipType")
+                    .WithMany("Memberships")
+                    .HasForeignKey("MembershipTypeId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("Member");
+                b.Navigation("Member");
 
-                    b.Navigation("MembershipType");
-                });
+                b.Navigation("MembershipType");
+            });
 
-            modelBuilder.Entity("PureGym.Domain.Entities.Member", b =>
-                {
-                    b.Navigation("AccessLogs");
+        modelBuilder.Entity("PureGym.Domain.Entities.Member", b =>
+            {
+                b.Navigation("AccessLogs");
 
-                    b.Navigation("Memberships");
-                });
+                b.Navigation("Memberships");
+            });
 
-            modelBuilder.Entity("PureGym.Domain.Entities.Membership", b =>
-                {
-                    b.Navigation("AccessLogs");
-                });
+        modelBuilder.Entity("PureGym.Domain.Entities.Membership", b =>
+            {
+                b.Navigation("AccessLogs");
+            });
 
-            modelBuilder.Entity("PureGym.Domain.Entities.MembershipType", b =>
-                {
-                    b.Navigation("Memberships");
-                });
+        modelBuilder.Entity("PureGym.Domain.Entities.MembershipType", b =>
+            {
+                b.Navigation("Memberships");
+            });
 #pragma warning restore 612, 618
-        }
     }
 }

@@ -3,9 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PureGym.Application.Features.Common;
-using PureGym.Application.Interfaces;
 using PureGym.Application.Models;
-using PureGym.Application.Services;
 using PureGym.Application.Validators;
 using PureGym.Domain.Entities;
 
@@ -30,8 +28,7 @@ public static class DependencyInjection
         services.AddListQueryHandler<MembershipType>();
         services.AddListQueryHandler<GymAccessLog>();
 
-        services.AddScoped<IOrderMembershipService, OrderMembershipService>();
-
+        
         return services;
     }
 

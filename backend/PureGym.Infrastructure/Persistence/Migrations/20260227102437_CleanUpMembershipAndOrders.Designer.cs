@@ -12,8 +12,8 @@ using PureGym.Infrastructure.Persistence;
 namespace PureGym.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260213092540_AddPendingToMembership")]
-    partial class AddPendingToMembership
+    [Migration("20260227102437_CleanUpMembershipAndOrders")]
+    partial class CleanUpMembershipAndOrders
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -434,16 +434,25 @@ namespace PureGym.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("MembershipId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("PurchasedAtUtc")
+                    b.Property<Guid>("MembershipTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("OrderedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MemberId");
+                    b.HasIndex("MemberId")
+                        .IsUnique();
 
-                    b.HasIndex("MembershipId");
+                    b.HasIndex("MembershipId")
+                        .IsUnique();
 
-                    b.ToTable("MemberOrders");
+                    b.HasIndex("MembershipTypeId");
+
+                    b.HasIndex("OrderedAtUtc");
+
+                    b.ToTable("member_orders", (string)null);
                 });
 
             modelBuilder.Entity("PureGym.Domain.Entities.Membership", b =>
@@ -729,18 +738,26 @@ namespace PureGym.Infrastructure.Persistence.Migrations
                     b.HasOne("PureGym.Domain.Entities.Member", "Member")
                         .WithMany("Orders")
                         .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PureGym.Domain.Entities.Membership", "Membership")
+                        .WithOne("Orders")
+                        .HasForeignKey("PureGym.Domain.Entities.MemberOrder", "MembershipId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PureGym.Domain.Entities.MembershipType", "MembershipType")
                         .WithMany("Orders")
-                        .HasForeignKey("MembershipId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("MembershipTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Member");
 
                     b.Navigation("Membership");
+
+                    b.Navigation("MembershipType");
                 });
 
             modelBuilder.Entity("PureGym.Domain.Entities.Membership", b =>
@@ -781,6 +798,8 @@ namespace PureGym.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("PureGym.Domain.Entities.MembershipType", b =>
                 {
                     b.Navigation("Memberships");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

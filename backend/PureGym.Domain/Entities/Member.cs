@@ -102,14 +102,30 @@ public class Member : BaseSoftDeletableEntity
         }
     }
 
-    public bool HasActiveOrPendingMembership()
+    public bool HasActiveMembership()
     {
         if (IsDeleted) return false;
 
         return Memberships.Any(m =>
-            !m.IsDeleted &&
-            (m.Status == MembershipStatus.Active || m.Status == MembershipStatus.Pending) &&
-            !m.IsExpired()
+        !m.IsDeleted &&
+        m.Status == MembershipStatus.Active &&
+        !m.IsExpired()
         );
+    }
+
+    public bool HasPendingMembership() 
+    {
+        if(IsDeleted) return false;
+
+        return Memberships.Any(m =>
+        !m.IsDeleted &&
+        m.Status == MembershipStatus.Pending &&
+        !m.IsExpired()
+        );
+    }
+
+    public bool HasActiveOrPendingMembership()
+    {
+        return HasActiveMembership() || HasPendingMembership();
     }
 }
