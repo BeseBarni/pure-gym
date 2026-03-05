@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
     <PackageReference Include="MassTransit.EntityFrameworkCore" />
     <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>
