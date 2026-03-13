@@ -116,6 +116,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddSingleton<ICacheService, InMemoryCacheService>();
+        services.AddScoped<IPaymentService, SPaymentService>();
 
         return services;
     }
