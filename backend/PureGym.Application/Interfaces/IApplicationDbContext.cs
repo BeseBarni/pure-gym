@@ -9,6 +9,7 @@ public interface IApplicationDbContext
     DbSet<Membership> Memberships { get; }
     DbSet<MembershipType> MembershipTypes { get; }
     DbSet<GymAccessLog> GymAccessLogs { get; }
+    DbSet<MemberOrder> MemberOrders { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
 

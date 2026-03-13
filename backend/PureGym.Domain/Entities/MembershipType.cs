@@ -14,6 +14,7 @@ public class MembershipType : BaseSoftDeletableEntity
     protected override string EntityName => nameof(MembershipType);
 
     public ICollection<Membership> Memberships { get; private set; } = [];
+    public ICollection<MemberOrder> Orders { get; private set; } = [];
 
     private MembershipType() { }
 

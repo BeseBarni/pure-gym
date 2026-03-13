@@ -14,6 +14,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public DbSet<Membership> Memberships => Set<Membership>();
     public DbSet<MembershipType> MembershipTypes => Set<MembershipType>();
     public DbSet<GymAccessLog> GymAccessLogs => Set<GymAccessLog>();
+    public DbSet<MemberOrder> MemberOrders => Set<MemberOrder>();
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
