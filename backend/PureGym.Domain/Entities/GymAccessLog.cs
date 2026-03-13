@@ -14,8 +14,7 @@ public class GymAccessLog
     public Membership? Membership { get; private set; }
 
     private GymAccessLog() { }
-
-    public static GymAccessLog Record(Member member)
+    public static GymAccessLog Record(Member member, DateTime accessedAtUtc)
     {
         var activeMembership = member.IsDeleted ? null : member.GetActiveMembership();
         var result = DetermineAccessResult(member, activeMembership);
@@ -25,7 +24,7 @@ public class GymAccessLog
             Id = Guid.NewGuid(),
             MemberId = member.Id,
             MembershipId = activeMembership?.Id,
-            AccessedAtUtc = DateTime.UtcNow,
+            AccessedAtUtc = accessedAtUtc,
             Result = result
         };
     }

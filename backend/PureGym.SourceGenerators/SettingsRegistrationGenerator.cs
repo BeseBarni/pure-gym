@@ -1,50 +1,59 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 
-namespace FitNetClean.SourceGenerators;
+namespace PureGym.SourceGenerators;
 
 [Generator]
 public class SettingsRegistrationGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var classes = context.SyntaxProvider
-            .CreateSyntaxProvider(
-                predicate: (s, _) => s is ClassDeclarationSyntax || s is RecordDeclarationSyntax,
-                transform: (ctx, _) => GetSettableType(ctx))
-            .Where(m => m != null);
-
-        var assemblyName = context.CompilationProvider.Select((c, _) => c.AssemblyName);
-
-        var combined = classes.Collect().Combine(assemblyName);
-
-        context.RegisterSourceOutput(combined, (spc, source) =>
+        var settingsClasses = context.CompilationProvider.Select((compilation, token) =>
         {
-            var (classNames, name) = source;
-            // Fallback to a default if name is somehow null
-            var targetNamespace = name ?? "GeneratedSettings";
+            var markerSymbol = compilation.GetTypeByMetadataName("PureGym.SharedKernel.IAssemblyMarker");
+            var iSettingsSymbol = compilation.GetTypeByMetadataName("PureGym.SharedKernel.Interfaces.ISettings");
 
-            var code = GenerateCode(classNames, targetNamespace);
+            if (markerSymbol == null || iSettingsSymbol == null)
+                return ImmutableArray<string>.Empty;
+
+            var targetAssembly = markerSymbol.ContainingAssembly;
+
+            var foundClasses = ImmutableArray.CreateBuilder<string>();
+            ScanNamespace(targetAssembly.GlobalNamespace, iSettingsSymbol, foundClasses);
+
+            return foundClasses.ToImmutable();
+        });
+
+        context.RegisterSourceOutput(settingsClasses, (spc, classes) =>
+        {
+            if (classes.IsDefaultOrEmpty) return;
+
+            var code = GenerateCode(classes, "PureGym.Infrastructure");
             spc.AddSource("GeneratedSettingsExtensions.g.cs", SourceText.From(code, Encoding.UTF8));
         });
     }
 
-    private string GetSettableType(GeneratorSyntaxContext ctx)
+    private void ScanNamespace(INamespaceSymbol namespaceSymbol, INamedTypeSymbol interfaceSymbol, ImmutableArray<string>.Builder results)
     {
-        var symbol = ctx.SemanticModel.GetDeclaredSymbol(ctx.Node) as INamedTypeSymbol;
-        if (symbol == null) return null;
-
-        if (symbol.AllInterfaces.Any(i => i.Name == "ISettings"))
+        foreach (var member in namespaceSymbol.GetMembers())
         {
-            return symbol.ToDisplayString();
+            if (member is INamespaceSymbol subNamespace)
+            {
+                ScanNamespace(subNamespace, interfaceSymbol, results);
+            }
+            else if (member is INamedTypeSymbol typeSymbol)
+            {
+                if (typeSymbol.TypeKind == TypeKind.Class && !typeSymbol.IsAbstract &&
+                    typeSymbol.AllInterfaces.Contains(interfaceSymbol, SymbolEqualityComparer.Default))
+                {
+                    results.Add(typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+                }
+            }
         }
-        return null;
     }
-
     private string GenerateCode(ImmutableArray<string> classNames, string targetNamespace)
     {
         var sb = new StringBuilder();
@@ -62,12 +71,17 @@ public class SettingsRegistrationGenerator : IIncrementalGenerator
 
         foreach (var className in classNames)
         {
-            if (string.IsNullOrEmpty(className)) continue;
-
-            sb.AppendLine($@"        services.AddOptions<{className}>()
+            sb.AppendLine($@"        // Register Options
+        services.AddOptions<{className}>()
             .Bind(configuration.GetSection({className}.SectionName))
             .ValidateDataAnnotations()
             .ValidateOnStart();");
+
+            sb.AppendLine($@"        // Register Singleton
+        services.AddSingleton(sp => 
+            sp.GetRequiredService<IOptions<{className}>>().Value);");
+
+            sb.AppendLine();
         }
 
         sb.AppendLine("        return services;");

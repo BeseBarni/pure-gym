@@ -1,0 +1,13 @@
+{
+  "name": "puregym-dev-runner",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm run infra:up && npx concurrently -k -p \"[{name}]\" -n \"API,WEB,MOCK\" -c \"cyan.bold,magenta.bold,yellow.bold\" \"npm:run:api\" \"npm:run:web\"",
+    "infra:up": "cd backend && docker compose up -d rabbitmq puregym-db",
+    "run:api": "cd backend && dotnet watch --project PureGym.WebAPI",
+    "run:web": "cd pure-gym-app && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  }
+}

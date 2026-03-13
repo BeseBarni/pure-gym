@@ -2,8 +2,8 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PureGym.Application.Interfaces;
-using PureGym.Application.Models;
 using PureGym.Domain.Enums;
+using PureGym.SharedKernel.Models;
 
 namespace PureGym.Application.Features.Membership;
 

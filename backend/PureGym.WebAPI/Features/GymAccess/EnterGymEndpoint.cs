@@ -1,7 +1,7 @@
 using FastEndpoints;
 using MediatR;
 using PureGym.Application.Features.GymAccess;
-using PureGym.Application.Models;
+using PureGym.SharedKernel.Models;
 
 namespace PureGym.WebAPI.Features.GymAccess;
 

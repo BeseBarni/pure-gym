@@ -1,12 +1,12 @@
 using MassTransit;
 using PureGym.Mock.RevolvingDoor;
 using PureGym.SharedKernel.Events;
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddSingleton<DoorState>();
-builder.Services.AddOpenApi();
-builder.Services.AddGeneratedSettings(builder.Configuration);
 
 var rabbitMqSettings =
     builder.Configuration.GetSection(RabbitMQSettings.SectionName)
@@ -35,13 +35,12 @@ builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
-
 app.MapHealthChecks("/health");
 app.MapControllers();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 app.Run();
 

@@ -1,6 +1,6 @@
 ﻿using PureGym.SharedKernel.Interfaces;
 
-namespace PureGym.Application.Settings;
+namespace PureGym.SharedKernel.Settings;
 
 public sealed class GymEntrySettings : ISettings
 {

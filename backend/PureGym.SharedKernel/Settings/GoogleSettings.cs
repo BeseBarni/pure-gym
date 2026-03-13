@@ -1,6 +1,6 @@
 ﻿using PureGym.SharedKernel.Interfaces;
 
-namespace PureGym.Infrastructure.Settings;
+namespace PureGym.SharedKernel.Settings;
 
 public class GoogleSettings : ISettings
 {

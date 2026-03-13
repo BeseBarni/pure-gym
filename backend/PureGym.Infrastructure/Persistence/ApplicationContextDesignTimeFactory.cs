@@ -1,10 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using PureGym.Infrastructure.Persistence;
-using PureGym.Infrastructure.Settings;
+using PureGym.SharedKernel.Settings;
 
-namespace FitNetClean.Infrastructure.Persistence;
+namespace PureGym.Infrastructure.Persistence;
 
 public class ApplicationContextDesignTimeFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 {
