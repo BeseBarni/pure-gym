@@ -19,7 +19,7 @@ public class Membership : BaseSoftDeletableEntity
     public Member Member { get; private set; } = null!;
     public MembershipType MembershipType { get; private set; } = null!;
     public ICollection<GymAccessLog> AccessLogs { get; private set; } = [];
-    public MemberOrder? Orders { get; private set; }
+    public MemberOrder? Order { get; private set; }
 
     public int DaysRemaining => IsValid() ? (EndDateUtc - DateTime.UtcNow).Days : 0;
 
@@ -42,7 +42,7 @@ public class Membership : BaseSoftDeletableEntity
             MemberId = member.Id,
             MembershipTypeId = type.Id,
             StartDateUtc = now,
-            EndDateUtc = now.AddDays(type.DurationInDays),
+            EndDateUtc = now.Date.AddDays(type.DurationInDays),
             Status = MembershipStatus.Active,
             CreatedAtUtc = now
         };
@@ -60,13 +60,13 @@ public class Membership : BaseSoftDeletableEntity
             throw DomainException.MembershipTypeInactive(type.Id);
 
         var now = DateTime.UtcNow;
-        var expiry = now.Date.AddDays(type.DurationInDays).AddDays(-1).AddSeconds(-1);
+        var expiry = now.Date.AddDays(type.DurationInDays);
         var membership = new Membership
         {
             MemberId = member.Id,
             MembershipTypeId = type.Id,
             StartDateUtc = now,
-            EndDateUtc = now.AddDays(type.DurationInDays),
+            EndDateUtc = expiry,
             Status = MembershipStatus.Pending,
             PendingSinceUtc = now,
             CreatedAtUtc = now

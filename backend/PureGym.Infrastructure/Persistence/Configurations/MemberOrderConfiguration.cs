@@ -26,7 +26,7 @@ public sealed class MemberOrderConfiguration : IEntityTypeConfiguration<MemberOr
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Membership)
-            .WithOne(m => m.Orders)
+            .WithOne(m => m.Order)
             .HasForeignKey<MemberOrder>(x => x.MembershipId)
             .OnDelete(DeleteBehavior.Restrict);
 
@@ -35,7 +35,7 @@ public sealed class MemberOrderConfiguration : IEntityTypeConfiguration<MemberOr
             .HasForeignKey(x => x.MembershipTypeId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasIndex(x => x.MemberId).IsUnique();
+        builder.HasIndex(x => x.MemberId);
         builder.HasIndex(x => x.MembershipId);
         builder.HasIndex(x => x.OrderedAtUtc);
 
